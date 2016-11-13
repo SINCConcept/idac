@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Data Space Things" />
+					</h2>
+					<h3>
+						<h:outputText value="Select the things, for which you would like to conclude a contract" />
+					</h3>
+					
+					<h:messages id="messages" styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+						
+					<p:dataTable var="thing" value="#{conclude_dc.things}" selection="#{conclude_dc.selectedThings}" rowKey="#{thing.resourceId}">
+						<p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+						<p:column headerText="Things">
+							<p:accordionPanel>
+								<p:tab title="#{thing.thingId}">
+									<h:panelGrid columns="2" cellpadding="10">
+										<h:outputText value="Resource ID" />
+										<h:outputText value="#{thing.resourceId}" />
+										<h:outputText value="Description" />
+										<h:outputText value="#{thing.description}" />
+									</h:panelGrid>
+								</p:tab>
+								<p:tab title="Data Sample">
+									<h:panelGrid columns="1" cellpadding="10">
+										<h:outputText value="#{thing.dataSample}" />
+									</h:panelGrid>
+								</p:tab>
+								<p:tab title="Thing Quality of Data and Service">
+									<h:panelGrid columns="2" cellpadding="10">
+										<h:outputText value="Completeness (%)" />
+										<h:outputText value="#{thing.qod.completeness}" />
+										
+										<h:outputText value="Conformity (%)" />
+										<h:outputText value="#{thing.qod.conformity}" />
+										
+										<h:outputText value="Accuracy (in %)" />
+										<h:outputText value="#{thing.qod.accuracy}" />
+										
+										<h:outputText value="Consistency (in %)" />
+										<h:outputText value="#{thing.qod.consistency}" />
+										
+										<h:outputText value="Timeliness (in ms)" />
+										<h:outputText value="#{thing.qod.timeliness}" />
+
+										<h:outputText value="Broadcasting Frequency (in ms)"/>
+										<h:outputText value="#{thing.qos.frequency}" />
+
+										<h:outputText value="Availability (in %)" />
+										<h:outputText value="#{thing.qos.availability}" />
+									</h:panelGrid>
+								</p:tab>
+							</p:accordionPanel>
+						</p:column>
+					</p:dataTable>
+					
+					<h:panelGrid columns="2" cellspacing="10" columnClasses="buttoncol1, buttoncol2" style="width:100%;" >
+						<p:commandButton value="Back to dataspaces" action="#{navi.dataspaces}" ajax="false" />
+						<p:commandButton value="Conclude Contract" action="#{conclude_dc.prepareContractNegotiation}" ajax="false" disabled="#{!conclude_dc.conclusionPossible}" />
+					</h:panelGrid>
+					
+					
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

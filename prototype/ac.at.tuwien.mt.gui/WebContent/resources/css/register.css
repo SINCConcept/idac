@@ -1,0 +1,36 @@
+.input14 {
+	width: 14em;
+} 
+
+.input16 {
+	width: 16em;
+} 
+
+.input18 {
+	width: 18em;
+} 
+
+.regcol1 {
+	text-align: left;
+}
+
+.regcol1w16 {
+	text-align: left;
+	width: 16em;
+}
+
+.regcol2 {
+	text-align: left;
+}
+
+.regcol3 {
+	text-align: left;
+}
+
+.buttoncol1 {
+	text-align: left;
+}
+
+.buttoncol2 {
+	text-align: right;
+}

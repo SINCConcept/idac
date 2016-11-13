@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Concluded Data Contract - Thing Rating" />
+					</h2>
+					
+					<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+					
+					<p:dataTable var="thing" value="#{cdc.things}">
+						<p:column headerText="Thing ID">
+							<h:outputText value="#{thing.thingId}" />
+						</p:column>
+						<p:column headerText="Thing Description">
+							<h:outputText value="#{thing.description}" />
+						</p:column>
+						<p:column headerText="Your Rating">
+							<p:commandLink immediate="true" action="#{navi.rateThing}">
+								<f:setPropertyActionListener target="#{thing_rate.thing}" value="#{thing}" />
+								<h:outputText value="Rate" style="margin-left: 1em; margin-right: 1em;"/>
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+					
+					<br/>
+					
+					<br/>
+					
+					<p:commandButton value="Back To Concluded Contracts" action="#{navi.listConcludedContracts}" style="text-align: left;" ajax="false" />
+					
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

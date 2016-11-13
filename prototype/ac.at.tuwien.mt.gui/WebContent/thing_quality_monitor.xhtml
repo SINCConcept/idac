@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Thing Quality Assurance Monitoring" />
+					</h2>
+					<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+
+					<h:panelGrid columns="2" cellspacing="10" cellpadding="5" style="text-align: left; margin: 0 auto;">
+						
+						<h:outputText value="ThingID" style="color: #369;"/>
+						<h:outputText value="#{t_monitor_quality.monitoredQoD.thingId}"/>
+						
+						<h:outputText value="Number of samples" style="color: #369;"/>
+						<h:outputText value="#{t_monitor_quality.monitoredQoD.totalNrOfSamples}"/>
+						
+						<h:outputText value="Messages Completeness (in %)" style="color: #369;"/>
+						<h:outputText value="#{t_monitor_quality.monitoredQoD.completeness}">
+							<f:convertNumber locale="de" minFractionDigits="3" maxFractionDigits="3"/>
+						</h:outputText>
+
+						<h:outputText value="Messages Conformity (in %)" style="color: #369;"/>
+						<h:outputText value="#{t_monitor_quality.monitoredQoD.conformity}">
+							<f:convertNumber locale="de" minFractionDigits="3" maxFractionDigits="3"/>
+						</h:outputText>
+
+						<h:outputText value="Average Message Age (in ms)" style="color: #369;"/>
+						<h:outputText value="#{t_monitor_quality.monitoredQoD.averageAge}">
+							<f:convertNumber locale="de" minFractionDigits="3" maxFractionDigits="3"/>
+						</h:outputText>
+
+						<h:outputText value="Average Message Currency (in ms)" style="color: #369;"/>
+						<h:outputText value="#{t_monitor_quality.monitoredQoD.averageCurrency}">
+							<f:convertNumber locale="de" minFractionDigits="3" maxFractionDigits="3"/>
+						</h:outputText>
+						
+						<h:outputText value="Availability (in %)" style="color: #369;"/>
+						<h:outputText value="#{t_monitor_quality.monitoredQoS.availability}">
+							<f:convertNumber locale="de" minFractionDigits="3" maxFractionDigits="3"/>
+						</h:outputText>
+						
+					</h:panelGrid>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

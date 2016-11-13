@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Welcome, #{ucb.naturalPerson.firstName}!" rendered="#{ucb.natural}" />
+						<h:outputText value="Welcome, #{ucb.legalPerson.companyName}!" rendered="#{!ucb.natural}" />
+					</h2>
+					<h3 style="margin-top: 2em; margin-bottom: 2em;">
+						<h:outputText value="What would you like to do next?" />
+					</h3>
+					
+					<h:messages id="messages" styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+					
+					<h:panelGrid columns="2" cellspacing="15" columnClasses="dc_table_col1_2_middle, dc_table_col1_2_middle" style="width:100%" >
+
+						<p:commandLink id="addThing" action="#{navi.addThing}" actionListener="#{tcb.setRegisterMode}">
+							<h:outputText value="Register Thing" style="font-weight: bold; color: #369;"/>
+							<br/>
+							<h:graphicImage value="resources/images/register.png" alt="IoT World" />
+						</p:commandLink>
+						
+						<p:commandLink id="manageThings" action="#{navi.manageThings}">
+							<h:outputText value="Manage Things" style="font-weight: bold; color: #369;"/>
+							<br/>
+							<h:graphicImage value="resources/images/manage_things.png" alt="IoT World" />
+						</p:commandLink>
+						
+						<p:commandLink id="conclude" action="#{navi.dataspaces}">
+							<h:outputText value="Conclude Data Contracts" style="font-weight: bold; color: #369;"/>
+							<br/>
+							<h:graphicImage value="resources/images/conclude.png" alt="IoT World" />
+						</p:commandLink>
+
+						<p:commandLink id="eneg" action="#{navi.openDataContracts}">
+							<h:outputText value="View/Negotiate Open Contracts" style="font-weight: bold; color: #369;"/>
+							<br/>
+							<h:graphicImage value="resources/images/eneg.png" alt="IoT World" />
+						</p:commandLink>
+
+						<p:commandLink id="monitor" action="#{navi.listConcludedContracts}">
+							<h:outputText value="Monitor Concluded Data Contracts" style="font-weight: bold; color: #369;" />
+							<br/>
+							<h:graphicImage value="resources/images/monitor.png" alt="IoT World" />
+						</p:commandLink>
+
+						<p:commandLink id="recommended" action="#{recommend_thing.recommend}">
+							<h:outputText value="Recommended Contracts" style="font-weight: bold; color: #369;"/>
+							<br/>
+							<h:graphicImage value="resources/images/search.png" alt="IoT World" />
+						</p:commandLink>
+
+					</h:panelGrid>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

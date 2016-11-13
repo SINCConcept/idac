@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Thing Delete" />
+					</h2>
+					<h3>
+						<h:outputText value="Are you sure you want to delete the Thing with the ID: #{tcb.thing.resourceId}" />
+					</h3>
+					<h:panelGrid cellspacing="10" columns="2" style="text-align: center;  width: 100%;" columnClasses="twocol1, twocol2">
+						<p:commandButton value="Cancel" action="#{navi.welcome}" ajax="false"/>
+						<p:commandButton value="Delete Thing" action="#{tcb.delete}" ajax="false"/>
+					</h:panelGrid>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<h:form id="header">
+		<div class="headerbar">
+			<h:panelGrid columns="2" style="width: 100%;" columnClasses="head1, head2">
+				<h:panelGroup id="commandHome" >
+				<p:commandLink id="homeIcon" action="#{navi.welcome}" style="">
+					<h:graphicImage value="resources/images/cart.png" style="height: 3.1em;" alt="Individual IoT Data Market" />
+					<h:graphicImage value="resources/images/globe.png" style="height: 2.8em;" alt="Individual IoT Data Market" />
+					<h:graphicImage value="resources/images/iidm.png" style="height: 3em;" alt="Individual IoT Data Market" />
+				</p:commandLink>
+				</h:panelGroup>
+				<h:panelGroup id="commands" style="text-align: right;">
+					<ul>
+						<li>
+							<c:if test="#{ucb.loggedIn == 'true'}">
+								<p:commandLink id="logout" action="#{navi.logout}">
+									<h:outputText value="#{msg.logout}" />
+								</p:commandLink>
+							</c:if>
+						</li>
+					</ul>
+				</h:panelGroup>
+			</h:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+</html>

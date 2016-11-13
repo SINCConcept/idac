@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<div style="text-align: center; width: 100%; margin-bottom: 5em;">
+				<h1>
+					<h:outputText value="#{msg.title}" />
+				</h1>
+				<h2>
+					<h:outputText value="Natural Person Registration" />
+				</h2>
+				<br/>
+				<h3>
+					<h:outputText value="Step 2 of 2: Fill in the following information!" />
+				</h3>
+				<h:panelGrid columns="1" cellspacing="10" style="text-align: center; width: 100%;">
+
+					<h:messages id="messages" styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+					
+		            <h:panelGrid columns="3" cellpadding="10" style="text-align: center; margin: 0 auto;" columnClasses="regcol1, regcol2, regcol3">
+						
+		                <h:outputText value="First Name" />
+						<p:inputText id="firstName" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.naturalPerson.firstName}"
+							required="true" requiredMessage="Please enter the first name.">
+						</p:inputText>
+						<p:watermark for="firstName" value="First Name" />
+						
+						<h:outputText value="Last Name" />
+						<p:inputText id="lastName" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.naturalPerson.lastName}"
+							required="true" requiredMessage="Please enter the last name.">
+						</p:inputText>
+						<p:watermark for="lastName" value="Last Name" />
+						
+		                <h:outputText value="#{msg.email}"/>
+		                <p:inputText id="email" styleClass="inputField" autocomplete="off"
+							style="width: 12em;" value="#{rcb.naturalPerson.email}"
+							required="true" requiredMessage="#{msg.error_email_missing}"
+							validatorMessage="#{msg.error_valid_email_missing}">
+							<f:validateRegex pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}" />
+						</p:inputText>
+						<p:watermark for="email" value="#{msg.email}" />
+						
+						<h:outputText value="#{msg.password}"/>
+						<p:password id="password" styleClass="inputField" autocomplete="off"
+							style="width: 12em;" value="#{rcb.naturalPerson.password}"
+							required="true" requiredMessage="#{msg.error_password_missing}"
+							feedback="true" />
+						<p:watermark for="password" value="#{msg.password}" />
+						
+						<h:outputText value="#{msg.password_confirmation}"/>
+						<p:password id="passwordRepeat" styleClass="inputField" autocomplete="off"
+							style="width: 12em;" value="#{rcb.passwordRepeat}"
+							required="true" requiredMessage="#{msg.error_password_missing}"	/>
+						<p:watermark for="passwordRepeat" value="#{msg.password_confirmation}" />
+						
+						<h:outputText value="#{msg.birthdate}"/>
+						<p:calendar id="birthdate" value="#{rcb.naturalPerson.birthDate}"
+							size="10" navigator="true" pattern="dd.MM.yyyy" required="true" requiredMessage="Please enter the birthdate"
+							yearRange="c-100:c" />
+						<p:watermark for="birthdate" value="Birthdate" />
+						
+						<h:outputText value="Address" style="color: #369; font-size: 1.2em;"/>
+						<h:outputText value=" "/>
+						<h:outputText value=" "/>
+						
+						<h:outputText value="Street" />
+						<p:inputText id="street" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.naturalPerson.address.street}"
+							required="true" requiredMessage="Please enter the street">
+						</p:inputText>
+						<p:watermark for="street" value="Street" />
+						
+						<h:outputText value="Number" />
+						<p:inputText id="number" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.naturalPerson.address.number}"
+							required="true" requiredMessage="Please enter the number">
+						</p:inputText>
+						<p:watermark for="number" value="Number" />
+						
+						<h:outputText value="City" />
+						<p:inputText id="city" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.naturalPerson.address.city}"
+							required="true" requiredMessage="Please enter the city">
+						</p:inputText>
+						<p:watermark for="city" value="City" />
+						
+						<h:outputText value="ZIP Code" />
+						<p:inputText id="zipcode" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.naturalPerson.address.zipCode}"
+							required="true" requiredMessage="Please enter the zip code">
+						</p:inputText>
+						<p:watermark for="zipcode" value="ZIP Code" />
+						
+						<h:outputText value="Country" />
+						<p:inputText id="country" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.naturalPerson.address.country}"
+							required="true" requiredMessage="Please enter the country">
+						</p:inputText>
+						<p:watermark for="country" value="Country" />
+		            </h:panelGrid>
+
+					<br/>
+		            <p:commandButton value="#{msg.register}" action="#{rcb.registerNatural}" ajax="false" >
+		            </p:commandButton>
+
+					<br/>
+					<p:commandLink id="register" action="#{navi.login}"	immediate="true">
+						<h:outputText value="#{msg.back_to_login}" />
+					</p:commandLink>
+					
+				</h:panelGrid>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

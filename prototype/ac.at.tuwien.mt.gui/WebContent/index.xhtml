@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<div style="text-align: center;" align="center">
+				<h1>
+					<h:outputText value="#{msg.title}" />
+				</h1>
+				<h:panelGrid id="loginGrid" columns="1" cellspacing="10" style="text-align: center; margin: 0 auto;" rendered="#{!ucb.loggedIn}">
+					<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" id="msgLogin" />
+
+					<p:inputText id="email" styleClass="input14" value="#{lcb.email}" required="true" 
+						requiredMessage="#{msg.error_email_missing}"
+						validatorMessage="#{msg.error_valid_email_missing}">
+						<f:validateRegex pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}" />
+					</p:inputText>
+					<p:watermark for="email" value="#{msg.email}" />
+
+					<p:password id="password" styleClass="input14" required="true" value="#{lcb.password}" 
+						requiredMessage="#{msg.error_password_missing}"/>
+					<p:watermark for="password" value="#{msg.password}" />
+					
+					<br/>
+					<p:commandButton value="#{msg.login}" action="#{lcb.login}" ajax="false"/>
+					
+					<br/>
+					<p:commandLink id="register" action="#{navi.register}" immediate="true" >
+							<h:outputText value="#{msg.register_here}" />
+					</p:commandLink>
+				</h:panelGrid>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,126 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>ac.at.tuwien.mt</groupId>
+	<artifactId>ac.at.tuwien.mt.parent</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0</version>
+	<name>ac.at.tuwien.mt</name>
+
+	<description>Parent project which combines all necessary sub-projects and specifies the necessary build order.</description>
+
+	<distributionManagement>
+		<site>
+			<id>website</id>
+			<url>file://${project.build.directory}/site</url>
+		</site>
+	</distributionManagement>
+	
+	<profiles>
+		<profile>
+			<id>ms</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>ac.at.tuwien.mt.model</module>
+				<module>ac.at.tuwien.mt.common.test</module>
+				<module>ac.at.tuwien.mt.dao</module>
+				<module>ac.at.tuwien.mt.datacontract</module>
+				<module>ac.at.tuwien.mt.monitoring</module>
+				<module>ac.at.tuwien.mt.recommending</module>
+				<module>ac.at.tuwien.mt.servicehandler</module>
+				<module>ac.at.tuwien.mt.gui</module>
+				<module>ac.at.tuwien.mt.client</module>
+			</modules>
+		</profile>
+	</profiles>
+
+	<build>
+		<!-- To clean and build without running the JUnit tests: -->
+		<!-- mvn clean install -Dmaven.test.skip=true -->
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Reporting dependencies and configuration -->
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>2.19.1</version>
+				<configuration>
+					<aggregate>true</aggregate>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+                 <stagingDirectory>C:\temp\stage</stagingDirectory>
+                 <reportPlugins>
+                     <plugin>
+                         <groupId>org.apache.maven.plugins</groupId>
+                         <artifactId>maven-project-info-reports-plugin</artifactId>
+                         <version>2.4</version>
+                     </plugin>
+                     <plugin>
+                         <groupId>org.apache.maven.plugins</groupId>
+                         <artifactId>maven-javadoc-plugin</artifactId>
+                         <version>2.8</version>
+                         <configuration></configuration>
+                         <reportSets>
+                             <reportSet>
+                                 <id>non-aggregate</id>
+                                 <configuration>
+                                     <!-- Specific configuration for the aggregate report -->
+                                     <sourcepath>${project.build.sourceDirectory}/../generated</sourcepath>
+                                 </configuration>
+                                 <reports>
+                                     <report>javadoc</report>
+                                 </reports>
+                             </reportSet>
+                             <reportSet>
+                                 <id>aggregate</id>
+                                 <configuration>
+                                     <!-- Specific configuration for the aggregate report -->
+                                     <sourcepath>${project.build.sourceDirectory}/../generated</sourcepath>
+                                 </configuration>
+                                 <reports>
+                                     <report>aggregate</report>
+                                 </reports>
+                             </reportSet>
+                         </reportSets>
+                     </plugin>
+                        <plugin>
+                         <groupId>org.apache.maven.plugins</groupId>
+                         <artifactId>maven-surefire-report-plugin</artifactId>
+                         <version>2.6</version>
+                     </plugin>
+                   </reportPlugins>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<!-- This config added to avoid adding the locations. Avoid downloading and filling the log with:  The repository url ... will be blacklisted. -->
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+</project>

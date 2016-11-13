@@ -1,0 +1,46 @@
+.headerbar {
+	background: none repeat scroll 0 0 #3797df;
+	padding: 0.3em 0 0.3em 0;
+	color: #ffffff;
+}
+
+.headerbar ul {
+	list-style: none;
+	text-align: right;
+	padding-right: 1em
+}
+
+.headerbar li {
+	display: inline;
+}
+
+#header {
+	color: white;
+	font-weight: normal !important;
+	text-shadow: none !important;
+}
+
+.head2  a:link, .headerbar a:visited, .headerbar a:hover, .headerbar a:active, .headerbar a:focus {
+	text-decoration: none;
+	color: white;
+}
+
+#header a {
+	padding: 1em;
+}
+
+.head2 a:hover {
+	background-color: #4ab7ff;
+}
+
+.head1 a:hover {
+	
+} 
+
+.head1 {
+	text-align: left;
+}
+
+.head2 {
+	text-align: right;
+}

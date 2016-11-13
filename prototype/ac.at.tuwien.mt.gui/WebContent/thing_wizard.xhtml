@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition>
+		<p:wizard>
+			<p:tab id="metaModel" title="Message Meta-Model">
+				<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+				<h:panelGrid columns="1" cellspacing="10" style="width:100%">
+					<h:panelGrid id="metaModelPanel" columns="2" cellspacing="10" columnClasses="regcol1, regcol2, regcol3" styleClass="regtable" >
+						<h:outputText value="Attribute Basic Information" style="color: #369; font-weight: bold;"/>
+						<h:outputText value=""/>
+						
+						<h:outputText value="Attribute Name"/>
+						<h:inputText id="attrName" value="#{tcb.attrToAdd.name}" style="width: 14em;"/>
+						
+						<h:outputText value="Attribute Data Type"/>
+						<h:selectOneMenu id="dataType" value="#{tcb.attrToAdd.dataType}" style="width: 14em;">
+							<f:selectItems value="#{tcb.dataTypes}"  />
+						</h:selectOneMenu>
+						
+						<h:outputText value="Layer (Parent)"/>
+						<h:selectOneMenu id="layer" value="#{tcb.addAsChildTo}" style="width: 14em;">
+							<f:selectItems value="#{tcb.possibleLayers}"  />
+						</h:selectOneMenu>
+						
+						<h:outputText value="Further Attribute Information" style="color: #369; font-weight: bold;"/>
+						<h:outputText value=""/>
+						
+						<h:outputText value="Identifier"/>
+						<h:selectBooleanCheckbox id="id" value="#{tcb.attrToAdd.property.identifier}" />
+						
+						<h:outputText value="Recording Date"/>
+						<h:selectBooleanCheckbox id="recDate" value="#{tcb.attrToAdd.property.recordingDate}" >
+							<f:ajax execute="@form" render="@form"/>
+						</h:selectBooleanCheckbox>
+						
+						<h:outputText value="Recording Date Format" rendered="#{tcb.attrToAdd.property.recordingDate}"/>
+						<p:inputText id="recDateFormat" value="#{tcb.attrToAdd.property.dateFormat}" style="width: 14em;" rendered="#{tcb.attrToAdd.property.recordingDate}"
+							title="e.g., use yyyy-MM-dd'T'HH:mm:ss.SSSZ for 2001-07-04T12:08:56.235-0700 or yyMMddHHmmssZ for 010704120856-0700, etc."/>
+					</h:panelGrid>
+					
+					
+					<h:commandButton value="Add Attribute" action="#{tcb.addAttribute}" style="margin: 1em;">
+						<f:ajax execute="@form" render="@form"/>
+					</h:commandButton>
+					<h:commandButton value="Reset" action="#{tcb.resetMetaModel}" style="margin: 1em;">
+						<f:ajax execute="@form" render="@form"/>
+					</h:commandButton>
+					<p:tree id="attrTree" value="#{tcb.root}" var="node" orientation="horizontal">
+				        <p:treeNode>
+				            <h:outputText value="#{node}" />
+				        </p:treeNode>
+				    </p:tree>
+				</h:panelGrid>
+			</p:tab>
+			<p:tab id="deviceInformation" title="Thing Information">
+				<p:panel header="Thing Information">
+					<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+					<h:panelGrid columns="3" cellspacing="10" columnClasses="regcol1w16, regcol2, regcol3" styleClass="regtable">
+						<h:outputText value="Resource ID"/>
+						<h:inputText id="resourceID" styleClass="input18" required="true" value="#{tcb.thing.resourceId}" requiredMessage="Please provide the resourceID of your Thing!"/>
+						<p:watermark for="resourceID" value="resourceID" />
+						
+						<h:outputText value="Broker URL"/>
+						<h:inputText id="thingBrokerUrl" styleClass="input18" value="#{tcb.thing.queueInfo.brokerURL}" disabled="true"/>
+						<p:watermark for="thingBrokerUrl" value="WILL BE PROVIDED"/>
+						
+						<h:outputText value="Queue Name"/>
+						<h:inputText id="thingQueueName" styleClass="input18" value="#{tcb.thing.queueInfo.queueName}" disabled="true"/>
+						<p:watermark for="thingQueueName" value="WILL BE PROVIDED"/>
+						
+						<h:outputText value="Resource sample data"/>
+						<h:inputTextarea id="sampleData" value="#{tcb.thing.dataSample}" cols="30" rows="10" autoResize="false" required="true" requiredMessage="Please provide some sample data!"/>
+						<p:watermark for="sampleData" value="Sample Data"/>
+						
+						<h:outputText value="Thing Description"/>
+						<h:inputTextarea id="description" value="#{tcb.thing.description}" maxlength="200" counterTemplate="{0} characters remaining." autoResize="false" 
+						rows="5" cols="30"
+						required="true" requiredMessage="Please provide a short description!"/>
+						<p:watermark for="description" value="Some simple description."/>
+					</h:panelGrid>
+				</p:panel>
+			</p:tab>
+			
+			<p:tab id="deviceQualityOfData" title="Quality">
+				<p:panel header="Quality of Data and Quality of Service">
+					<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+					<h:panelGrid columns="3" cellspacing="10" columnClasses="regcol1w16, regcol2, regcol3" styleClass="regtable">
+					
+						<h:outputText value="Quality of Data" style="color: #369; font-weight: bold;"/>
+						<h:outputText value=""/>
+						<h:outputText value=""/>
+					
+						<h:outputText value="Enable standard monitoring"/>
+						<p:selectBooleanButton value="#{tcb.thing.standardMonitoring}" onLabel="Yes" offLabel="No" />
+						<h:outputText value=""/>
+					
+						<h:outputText value="Completeness (in %)"/>
+						<p:inputText id="qod_compl" value="#{tcb.thing.qod.completeness}" 
+							required="true"
+							requiredMessage="Please provide a value!"
+							converterMessage="Please provide a number between 0.001 and 100."
+							validatorMessage="Invalid number format" title="Number representing the value in % e.g., 99.98 or 100">
+							<f:validateDoubleRange minimum="0.001" maximum="100" />
+						</p:inputText>
+						<p:watermark for="qod_compl" value="95.5" />
+						
+						<h:outputText value="Conformity (in %)"/>
+						<p:inputText id="qod_conf" value="#{tcb.thing.qod.conformity}" 
+							required="true"
+							requiredMessage="Please provide a value!"
+							converterMessage="Please provide a number between 0.001 and 100."
+							validatorMessage="Invalid number format" title="Number representing the value in % e.g., 99.98 or 100">
+							<f:validateDoubleRange minimum="0.001" maximum="100" />
+						</p:inputText>
+						<p:watermark for="qod_conf" value="95.5" />
+						
+					    <h:outputText value="Accuracy (in %)"/>
+						<p:inputText id="qod_accuracy" value="#{tcb.thing.qod.accuracy}" 
+							required="true"
+							requiredMessage="Please provide a value!"
+							converterMessage="Please provide a number between 0.001 and 100."
+							validatorMessage="Invalid number format" title="Number representing the value in % e.g., 99.98 or 100">
+							<f:validateDoubleRange minimum="0.001" maximum="100" />
+						</p:inputText>
+						<p:watermark for="qod_accuracy" value="95.5" />
+						
+					    <h:outputText value="Consistency (in %)"/>
+						<p:inputText id="qod_consistency" value="#{tcb.thing.qod.consistency}" 
+							required="true"
+							requiredMessage="Please provide a value!"
+							converterMessage="Please provide a number between 0.001 and 100."
+							validatorMessage="Invalid number format" title="Number representing the value in % e.g., 99.98 or 100">
+							<f:validateDoubleRange minimum="0.001" maximum="100" />
+						</p:inputText>
+						<p:watermark for="qod_consistency" value="95.5" />
+						
+					    <h:outputText value="Timeliness (in ms)"/>
+					    <p:inputText id="qod_timeliness" value="#{tcb.thing.qod.timeliness}" 
+					    	required="true"
+							requiredMessage="Please provide a value!"
+							converterMessage="Please provide a number between 0.001 and 100."
+							validatorMessage="Invalid number format" title="Number representing the value in % e.g., 99.98 or 100000000">
+							<f:validateDoubleRange minimum="0.001" maximum="100000000" />
+						</p:inputText>
+						<p:watermark for="qod_timeliness" value="2000" />
+					
+						<h:outputText value="Quality of Service" style="color: #369; font-weight: bold;"/>
+						<h:outputText value=""/>
+						<h:outputText value=""/>
+					
+					
+						<h:outputText value="Broadcasting Frequency (in ms)"/>
+						<p:inputText id="qos_frequency" value="#{tcb.thing.qos.frequency}" 
+							required="true"
+							requiredMessage="Please provide a value!"
+							converterMessage="Please provide a number between 1 and 100000000."
+							validatorMessage="Invalid number format" title="Number representing the value in % e.g., 10 or 60000">
+							<f:validateLongRange minimum="1" maximum="100000000" />
+						</p:inputText>
+						<p:watermark for="qos_frequency" value="1000" />
+					
+						<h:outputText value="Availability (in %)"/>
+						<p:inputText id="qos_avail" value="#{tcb.thing.qos.availability}" 
+							required="true"
+							requiredMessage="Please provide a value!"
+							converterMessage="Please provide a number between 0.001 and 100."
+							validatorMessage="Invalid number format" title="Number representing the value in % e.g., 99.98 or 100">
+							<f:validateDoubleRange minimum="0.001" maximum="100" />
+						</p:inputText>
+						<p:watermark for="qos_avail" value="95.5" />
+					  
+					</h:panelGrid>
+				</p:panel>
+			</p:tab>
+			
+			<p:tab id="devicePricingModel" title="Pricing Model">
+				<p:panel header="Pricing Model">
+					<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+					<h:panelGrid columns="3" cellspacing="10" columnClasses="regcol1w16, regcol2, regcol3" styleClass="regtable">
+						<h:outputText value="Currency" />
+						<p:selectOneMenu id="car" value="#{tcb.thing.pricingModel.currency}" >
+							<f:selectItem itemLabel="EUR" itemValue="EUR" />
+							<f:selectItem itemLabel="USD" itemValue="USD" />
+						</p:selectOneMenu>
+						<h:outputText value=""/>
+						
+						<h:outputText value="Price"/>
+						<p:inputText id="pm_price" value="#{tcb.thing.pricingModel.price}" 
+							required="true"
+							requiredMessage="Please provide a value!"
+							converterMessage="Please provide a number between 0.001 and 1000000."
+							validatorMessage="Please provide a number between 0.001 and 1000000." title="Number representing the value e.g., 0.01 or 100">
+							<f:validateDoubleRange minimum="0.001" maximum="1000000" />
+						</p:inputText>
+						<p:watermark for="pm_price" value="0.01" />
+						
+						<h:outputText value="Payment"/>
+						<p:selectOneRadio value="#{tcb.thing.pricingModel.transaction}" immediate="true" > 
+							<f:selectItem itemLabel="Transaction" itemValue="true"  />
+           					<f:selectItem itemLabel="Subscription" itemValue="false" />
+           					<f:ajax render="@form" execute="@this pm_price"/>
+						</p:selectOneRadio>
+						<h:outputText value=""/>
+						
+						<h:outputText value="Number of transactions" rendered="#{tcb.thing.pricingModel.transaction}" />
+						<p:inputText id="nr_trans" value="#{tcb.thing.pricingModel.numberOfTransactions}" 
+							rendered="#{tcb.thing.pricingModel.transaction}"
+							required="true"
+							requiredMessage="Please provide a value!"
+							converterMessage="Please provide a number between 1 and 1000000."
+							validatorMessage="Invalid number format" title="Number representing the value e.g., 1 or 100">
+							<f:validateLongRange minimum="1" maximum="1000000" />
+						</p:inputText>
+						<p:watermark for="nr_trans" value="100" rendered="tcb.thing.pricingModel.transaction"/>
+						
+						<h:outputText value="Start date" rendered="#{!tcb.thing.pricingModel.transaction}"/>
+						<p:calendar value="#{tcb.thing.pricingModel.subscription.startDate}" 
+							required="true"
+							requiredMessage="Please provide a value!"
+							pattern="dd.MM.yyyy" rendered="#{!tcb.thing.pricingModel.transaction}"/>
+						<h:outputText value="" rendered="#{!tcb.thing.pricingModel.transaction}"/>
+						
+						<h:outputText value="End date" rendered="#{!tcb.thing.pricingModel.transaction}"/>
+						<p:calendar value="#{tcb.thing.pricingModel.subscription.endDate}" 
+							required="true"
+							requiredMessage="Please provide a value!"
+							pattern="dd.MM.yyyy" rendered="#{!tcb.thing.pricingModel.transaction}"/>
+						<h:outputText value="" rendered="#{!tcb.thing.pricingModel.transaction}"/>
+					</h:panelGrid>
+				</p:panel>
+			</p:tab>
+			
+			<p:tab id="deviceDataRights" title="Data Rights">
+				<p:panel header="Data Rights">
+					<h:panelGrid columns="2" cellspacing="10" columnClasses="regcol1w16, regcol2" styleClass="regtable">
+						<h:outputText value="Data Derivation"/>
+						<p:selectBooleanButton value="#{tcb.thing.dataRights.derivation}" onLabel="Yes" offLabel="No" />
+						
+						<h:outputText value="Data Collection"/>
+						<p:selectBooleanButton value="#{tcb.thing.dataRights.collection}" onLabel="Yes" offLabel="No" />
+						
+						<h:outputText value="Data Reproduction"/>
+						<p:selectBooleanButton value="#{tcb.thing.dataRights.reproduction}" onLabel="Yes" offLabel="No" />
+						
+						<h:outputText value="Commercial Usage"/>
+						<p:selectBooleanButton value="#{tcb.thing.dataRights.commercialUsage}" onLabel="Yes" offLabel="No" />
+					</h:panelGrid>
+				</p:panel>
+			</p:tab>
+			
+			<p:tab id="devicePurchasingPolicy" title="Purchasing Policy">
+				<p:panel header="Purchasing Policy">
+					<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+					<h:panelGrid columns="3" cellspacing="10" columnClasses="regcol1w16, regcol2, regcol3" styleClass="regtable">
+						<h:outputText value="Contract termination" />
+						<h:inputTextarea id="contractTermination" value="#{tcb.thing.purchasingPolicy.contractTermination}" cols="50"/>
+						<p:watermark for="contractTermination" value="Sample Clause..."/>
+						
+						<h:outputText value="Refund" />
+						<h:inputTextarea id="refunds" value="#{tcb.thing.purchasingPolicy.refund}" cols="50" />
+						<p:watermark for="refunds" value="Sample Clause..."/>
+						
+						<h:outputText value="Shipping" />
+						<h:inputTextarea id="shipping" value="#{tcb.thing.purchasingPolicy.shipping}" cols="50" />
+						<p:watermark for="shipping" value="Sample Clause..."/>
+					</h:panelGrid>
+				</p:panel>
+			</p:tab>
+			
+			<p:tab id="controlAndRelationship" title="Control and Relationship">
+				<p:panel header="Control and Relationship">
+					<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+					<h:panelGrid columns="3" cellspacing="10" columnClasses="regcol1w16, regcol2, regcol3" styleClass="regtable">
+						<h:outputText value="Warranty" />
+						<h:inputTextarea id="warranty" value="#{tcb.thing.controlAndRelationship.warranty}" cols="50" />
+						<p:watermark for="warranty" value="Sample Clause..."/>
+						
+						<h:outputText value="Indemnity" />
+						<h:inputTextarea id="indemnity" value="#{tcb.thing.controlAndRelationship.indemnity}" cols="50" />
+						<p:watermark for="indemnity" value="Sample Clause..."/>
+						
+						<h:outputText value="Liability" />
+						<h:inputTextarea id="liability" value="#{tcb.thing.controlAndRelationship.liability}" cols="50" />
+						<p:watermark for="liability" value="Sample Clause..."/>
+						
+						<h:outputText value="Juristiction" />
+						<h:inputTextarea id="juristiction" value="#{tcb.thing.controlAndRelationship.juristiction}" cols="50" />
+						<p:watermark for="juristiction" value="Sample Clause..."/>
+					</h:panelGrid>
+					
+					<p:commandButton value="Clone Thing" action="#{tcb.clone}" ajax="false" rendered="#{tcb.cloneMode}"/>
+					<p:commandButton value="Update Thing" action="#{tcb.update}" ajax="false" rendered="#{tcb.updateMode}"/>
+					<p:commandButton value="Register Thing" action="#{tcb.add}" ajax="false" rendered="#{tcb.registerMode}"/>
+					
+				</p:panel>
+			</p:tab>
+		</p:wizard>
+		
+		<p:commandButton value="Back to Welcome" action="#{navi.welcome}" style="margin: 2em;" immediate="true" ajax="false" />
+					
+	</ui:composition>
+</h:body>
+</html>

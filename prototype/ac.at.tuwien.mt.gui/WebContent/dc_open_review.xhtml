@@ -1,0 +1,343 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Review Offered Data Contract" />
+					</h2>
+
+					<h:messages id="messages" styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+					
+					<p:wizard>
+						<p:tab id="contractInformation" title="Contract Information">
+							<p:panel header="Contract Information">
+								<h:panelGrid columns="2" cellspacing="10" columnClasses="regcol1, regcol2" styleClass="regtable">
+									<h:outputText value="Contract ID"/>
+									<h:outputText value="#{rodc.contract.dataContractMetaInfo.contractId}"/>
+									
+									<h:outputText value="Creation Date"/>
+									<h:outputText value="#{rodc.contract.dataContractMetaInfo.creationDate}">
+										<f:convertDateTime pattern="dd.MM.yyyy"/>
+									</h:outputText>
+									
+									<h:outputText value="Seller ID"/>
+									<h:outputText value="#{rodc.contract.dataContractMetaInfo.party1Id}"/>
+									
+									<h:outputText value="Buyer ID"/>
+									<h:outputText value="#{rodc.contract.dataContractMetaInfo.party2Id}"/>
+									
+									<h:outputText value="Revision"/>
+									<h:outputText value="#{rodc.contract.dataContractMetaInfo.revision}"/>
+								</h:panelGrid>
+								<h:panelGrid columns="1" cellspacing="10" styleClass="regtable" >
+									<p:dataTable var="thing" value="#{rodc.things}">
+										<f:facet name="header">
+								            Things
+								        </f:facet>
+										<p:column headerText="Thing ResourceID">
+											<h:outputText value="#{thing.resourceId}" />
+										</p:column>
+										<p:column headerText="Thing Description">
+											<h:outputText value="#{thing.description}" />
+										</p:column>
+									</p:dataTable>
+								</h:panelGrid>
+							</p:panel>
+						</p:tab>
+						<p:tab id="deviceDataRights" title="Data Rights">
+							<p:panel header="Data Rights">
+								<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+									<h:outputText value="Data Right" style="font-weight: bold; color: #369;"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:outputText value="Value" style="font-weight: bold; color: #369;"/>
+										<h:outputText value="Previous Value" style="font-weight: bold; color: #369;"/>
+									</h:panelGrid>
+								
+									<h:outputText value="Data Derivation"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<p:selectBooleanButton disabled="#{rodc.contractAwaitingAnswer}" value="#{rodc.contract.dataRights.derivation}" onLabel="Yes" offLabel="No" style="width: 3em;" />
+										<p:selectBooleanButton disabled="true" value="#{rodc.latestHistEntry.dataRights.derivation}" onLabel="Yes" offLabel="No" style="width: 3em;" />
+									</h:panelGrid>
+									
+									<h:outputText value="Data Collection"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<p:selectBooleanButton disabled="#{rodc.contractAwaitingAnswer}" value="#{rodc.contract.dataRights.collection}" onLabel="Yes" offLabel="No" style="width: 3em;"/>
+										<p:selectBooleanButton disabled="true" value="#{rodc.latestHistEntry.dataRights.collection}"  onLabel="Yes" offLabel="No" style="width: 3em;"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Data Reproduction"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<p:selectBooleanButton disabled="#{rodc.contractAwaitingAnswer}" value="#{rodc.contract.dataRights.reproduction}" onLabel="Yes" offLabel="No" style="width: 3em;"/>
+										<p:selectBooleanButton disabled="true" value="#{rodc.latestHistEntry.dataRights.reproduction}"  onLabel="Yes" offLabel="No" style="width: 3em;"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Commercial Usage"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<p:selectBooleanButton disabled="#{rodc.contractAwaitingAnswer}" value="#{rodc.contract.dataRights.commercialUsage}" onLabel="Yes" offLabel="No" style="width: 3em;"/>
+										<p:selectBooleanButton disabled="true" value="#{rodc.latestHistEntry.dataRights.commercialUsage}"  onLabel="Yes" offLabel="No" style="width: 3em;"/>
+									</h:panelGrid>
+									
+								</h:panelGrid>
+							</p:panel>
+						</p:tab>
+						<p:tab id="devicePricingModel" title="Pricing Model">
+							<p:panel header="Pricing Model">
+								<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+								<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+									<h:outputText value="Pricing" style="font-weight: bold; color: #369;"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:outputText value="Value" style="font-weight: bold; color: #369;"/>
+										<h:outputText value="Previous Value" style="font-weight: bold; color: #369;"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Currency" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<p:selectOneMenu id="currencyCurrent" disabled="#{rodc.contractAwaitingAnswer}" value="#{rodc.contract.pricingModel.currency}" >
+											<f:selectItem itemLabel="EUR" itemValue="EUR" />
+											<f:selectItem itemLabel="USD" itemValue="USD" />
+										</p:selectOneMenu>
+										<p:selectOneMenu id="currencyCurrentOld" disabled="true" value="#{rodc.latestHistEntry.pricingModel.currency}" >
+											<f:selectItem itemLabel="EUR" itemValue="EUR" />
+											<f:selectItem itemLabel="USD" itemValue="USD" />
+										</p:selectOneMenu>
+									</h:panelGrid>
+									
+									<h:outputText value="Price" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:panelGroup>
+											<p:inputText id="pm_price" value="#{rodc.contract.pricingModel.price}" 
+												required="true"
+												disabled="#{rodc.contractAwaitingAnswer}"
+												requiredMessage="Please provide a value!"
+												converterMessage="Please provide a number between 0.001 and 1000000."
+												validatorMessage="Please provide a number between 0.001 and 1000000." title="Number representing the value e.g., 0.01 or 100">
+												<f:validateDoubleRange minimum="0.001" maximum="1000000" />
+											</p:inputText>
+											<p:watermark for="pm_price" value="0.01" />
+										</h:panelGroup>
+										<p:inputText id="pm_priceOld" value="#{rodc.latestHistEntry.pricingModel.price}" disabled="true" />
+									</h:panelGrid>
+									
+									<h:outputText value="Payment Type"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<p:selectOneRadio value="#{rodc.contract.pricingModel.transaction}" disabled="#{rodc.contractAwaitingAnswer}"> 
+											<f:selectItem itemLabel="Transaction" itemValue="true"  />
+				           					<f:selectItem itemLabel="Subscription" itemValue="false" />
+				           					<f:ajax render="@form" execute="@this pm_price"/>
+										</p:selectOneRadio>
+										<p:selectOneRadio disabled="true" value="#{rodc.latestHistEntry.pricingModel.transaction}" immediate="true" > 
+											<f:selectItem itemLabel="Transaction" itemValue="true"  />
+				           					<f:selectItem itemLabel="Subscription" itemValue="false" />
+										</p:selectOneRadio>
+									</h:panelGrid>
+									
+									<h:outputText value="Number of transactions" rendered="#{rodc.contract.pricingModel.transaction}"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table" rendered="#{rodc.contract.pricingModel.transaction}">
+										<h:panelGrid>
+											<p:inputText id="nr_trans" value="#{rodc.contract.pricingModel.numberOfTransactions}" 
+												required="true" disabled="#{rodc.contractAwaitingAnswer}"
+												requiredMessage="Please provide a value!"
+												converterMessage="Please provide a number between 1 and 1000000."
+												validatorMessage="Invalid number format" title="Number representing the value e.g., 1 or 100">
+												<f:validateLongRange minimum="1" maximum="1000000" />
+											</p:inputText>
+											<p:watermark for="nr_trans" value="100" rendered="#{rodc.contract.pricingModel.transaction}" />
+										</h:panelGrid>
+										<h:outputText value="#{rodc.latestHistEntry.pricingModel.numberOfTransactions}"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Start date" rendered="#{!rodc.contract.pricingModel.transaction}"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" 
+										rendered="#{!rodc.contract.pricingModel.transaction}"
+										styleClass="dc_table">
+										<p:calendar value="#{rodc.contract.pricingModel.subscription.startDate}" 
+											disabled="#{rodc.contractAwaitingAnswer}"
+											requiredMessage="Please provide a value!"
+											required="true"
+											pattern="dd.MM.yyyy HH:mm:ss" />
+										<p:calendar value="#{rodc.latestHistEntry.pricingModel.subscription.startDate}" 
+											disabled="true"
+											pattern="dd.MM.yyyy HH:mm:ss" />
+									</h:panelGrid>
+									
+									<h:outputText value="End date" rendered="#{!rodc.contract.pricingModel.transaction}"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" 
+										rendered="#{!rodc.contract.pricingModel.transaction}"
+										styleClass="dc_table">
+										<p:calendar value="#{rodc.contract.pricingModel.subscription.endDate}" 
+											disabled="#{rodc.contractAwaitingAnswer}"
+											requiredMessage="Please provide a value!"
+											required="true"
+											pattern="dd.MM.yyyy HH:mm:ss" />
+										<p:calendar value="#{rodc.latestHistEntry.pricingModel.subscription.endDate}" 
+											disabled="true"
+											pattern="dd.MM.yyyy HH:mm:ss" />
+									</h:panelGrid>
+									
+									<h:outputText value="Broker URL" rendered="#{!rodc.contract.pricingModel.transaction and rodc.buyerRole}" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table"
+										rendered="#{!rodc.contract.pricingModel.transaction and rodc.buyerRole}">
+										<h:panelGroup>
+											<p:inputText id="brokerURL" value="#{rodc.contract.pricingModel.subscription.brokerURL}" 
+												required="true"
+												requiredMessage="Please provide a value!">
+											</p:inputText>
+											<p:watermark for="brokerURL" value="tcp://xxx.xxx.xxx.xxx:61616" />
+										</h:panelGroup>
+										<p:inputText id="oldBrokerURL" value="#{rodc.latestHistEntry.pricingModel.subscription.brokerURL}" 
+													disabled="true">
+										</p:inputText>
+									</h:panelGrid>
+									
+									<h:outputText value="Queue Name" rendered="#{!rodc.contract.pricingModel.transaction and rodc.buyerRole}" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table"
+										rendered="#{!rodc.contract.pricingModel.transaction and rodc.buyerRole}">
+										<h:panelGroup>
+											<p:inputText id="queueName" value="#{rodc.contract.pricingModel.subscription.queueName}" 
+												rendered="#{!rodc.contract.pricingModel.transaction}"
+												required="true"
+												requiredMessage="Please provide a value!">
+											</p:inputText>
+											<p:watermark for="queueName" value="myQueueName" rendered="#{!rodc.contract.pricingModel.transaction}"/>
+										</h:panelGroup>
+										<p:inputText id="oldQueueName" value="#{rodc.latestHistEntry.pricingModel.subscription.queueName}" 
+													disabled="true">
+										</p:inputText>
+									</h:panelGrid>
+									
+								</h:panelGrid>
+							</p:panel>
+						</p:tab>
+						<p:tab id="devicePurchasingPolicy" title="Purchasing Policy">
+							<p:panel header="Purchasing Policy">
+								<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+								<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+									<h:outputText value="Policy" style="font-weight: bold; color: #369;"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:outputText value="Value" style="font-weight: bold; color: #369;"/>
+										<h:outputText value="Previous Value" style="font-weight: bold; color: #369;"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Contract termination" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:panelGroup>
+											<p:inputTextarea id="contractTermination" required="true" requiredMessage="Please provide a clause!"  
+												disabled="#{rodc.contractAwaitingAnswer}"
+												value="#{rodc.contract.purchasingPolicy.contractTermination}" autoResize="false" rows="7" cols="40"/>
+											<p:watermark for="contractTermination" value="Sample Clause..."/>
+										</h:panelGroup>
+										<p:inputTextarea disabled="true" id="contractTerminationOld" 
+											value="#{rodc.latestHistEntry.purchasingPolicy.contractTermination}" autoResize="false" rows="7" cols="40"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Refund" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:panelGroup>
+											<p:inputTextarea id="contractRefund" required="true" requiredMessage="Please provide a clause!"  
+												disabled="#{rodc.contractAwaitingAnswer}"
+												value="#{rodc.contract.purchasingPolicy.refund}" autoResize="false" rows="7" cols="40"/>
+											<p:watermark for="contractRefund" value="Sample Clause..."/>
+										</h:panelGroup>
+										<p:inputTextarea disabled="true" id="contractRefundOld" 
+											value="#{rodc.latestHistEntry.purchasingPolicy.refund}" autoResize="false" rows="7" cols="40"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Shipping" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:panelGroup>
+											<p:inputTextarea id="contractShipping" required="true" requiredMessage="Please provide a clause!"  
+												disabled="#{rodc.contractAwaitingAnswer}"
+												value="#{rodc.contract.purchasingPolicy.shipping}" autoResize="false" rows="7" cols="40"/>
+											<p:watermark for="contractShipping" value="Sample Clause..."/>
+										</h:panelGroup>
+										<p:inputTextarea disabled="true" id="contractShippingOld" 
+											value="#{rodc.latestHistEntry.purchasingPolicy.shipping}" autoResize="false" rows="7" cols="40"/>
+									</h:panelGrid>
+								</h:panelGrid>
+							</p:panel>
+						</p:tab>
+						<p:tab id="controlAndRelationship" title="Control and Relationship">
+							<p:panel header="Control and Relationship">
+								<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+								<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+									<h:outputText value="Policy" style="font-weight: bold; color: #369;"/>
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:outputText value="Value" style="font-weight: bold; color: #369;"/>
+										<h:outputText value="Previous Value" style="font-weight: bold; color: #369;"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Warranty" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:panelGroup>
+											<p:inputTextarea id="contractWarranty" required="true" requiredMessage="Please provide a clause!"  
+												disabled="#{rodc.contractAwaitingAnswer}"
+												value="#{rodc.contract.controlAndRelationship.warranty}" autoResize="false" rows="7" cols="40"/>
+											<p:watermark for="contractWarranty" value="Sample Clause..."/>
+										</h:panelGroup>
+										<p:inputTextarea disabled="true" id="contractWarrantyOld" 
+											value="#{rodc.latestHistEntry.controlAndRelationship.warranty}" autoResize="false" rows="7" cols="40"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Indemnity" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:panelGroup>
+											<p:inputTextarea id="contractIndemnity" required="true" requiredMessage="Please provide a clause!"  
+												disabled="#{rodc.contractAwaitingAnswer}"
+												value="#{rodc.contract.controlAndRelationship.indemnity}" autoResize="false" rows="7" cols="40"/>
+											<p:watermark for="contractIndemnity" value="Sample Clause..."/>
+										</h:panelGroup>
+										<p:inputTextarea disabled="true" id="contractIndemnityOld" 
+											value="#{rodc.latestHistEntry.controlAndRelationship.indemnity}" autoResize="false" rows="7" cols="40"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Liablity" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:panelGroup>
+											<p:inputTextarea id="contractliability" required="true" requiredMessage="Please provide a clause!"  
+												disabled="#{rodc.contractAwaitingAnswer}"
+												value="#{rodc.contract.controlAndRelationship.liability}" autoResize="false" rows="7" cols="40"/>
+											<p:watermark for="contractliability" value="Sample Clause..."/>
+										</h:panelGroup>
+										<p:inputTextarea disabled="true" id="contractliabilityOld" 
+											value="#{rodc.latestHistEntry.controlAndRelationship.liability}" autoResize="false" rows="7" cols="40"/>
+									</h:panelGrid>
+									
+									<h:outputText value="Juristiction" />
+									<h:panelGrid columns="2" cellspacing="5" columnClasses="dc_table_col1_2, dc_table_col1_2" styleClass="dc_table">
+										<h:panelGroup>
+											<p:inputTextarea id="contractjuristiction" required="true" requiredMessage="Please provide a clause!"  
+												disabled="#{rodc.contractAwaitingAnswer}"
+												value="#{rodc.contract.controlAndRelationship.juristiction}" autoResize="false" rows="7" cols="40"/>
+											<p:watermark for="contractjuristiction" value="Sample Clause..."/>
+										</h:panelGroup>
+										<p:inputTextarea disabled="true" id="contractjuristictionOld" 
+											value="#{rodc.latestHistEntry.controlAndRelationship.juristiction}" autoResize="false" rows="7" cols="40"/>
+									</h:panelGrid>
+								</h:panelGrid>
+							</p:panel>
+						</p:tab>
+						<p:tab id="Procedure" title="Answer" rendered="#{!rodc.contractAwaitingAnswer}">
+							<p:panel header="Answer">
+								<p:commandButton value="Conclude Contract" action="#{rodc.concludeContract}" rendered="#{rodc.unchanged}" ajax="false" />
+								<p:commandButton value="Send Contract Offer" action="#{rodc.buyerOffer}" rendered="#{!rodc.unchanged and rodc.buyerRole}" ajax="false" />
+								<p:commandButton value="Send Contract Offer" action="#{rodc.providerOffer}" rendered="#{!rodc.unchanged and !rodc.buyerRole}" ajax="false" />
+							</p:panel>
+						</p:tab>
+					</p:wizard>
+					<h:panelGrid columns="1" cellspacing="10" style="width: 100%; text-align: center;">
+						<p:commandButton value="Back To Open Contracts" action="#{navi.openDataContracts}" />
+					</h:panelGrid>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

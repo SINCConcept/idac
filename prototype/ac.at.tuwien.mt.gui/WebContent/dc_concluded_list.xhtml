@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Concluded IoT Data Contracts" />
+					</h2>
+
+					<h:messages id="messages" styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+						
+					<p:dataTable var="contract" value="#{concluded_dc_list.list}">
+						<p:column headerText="Contract ID">
+							<h:outputText value="#{contract.contractId}" />
+						</p:column>
+						<p:column headerText="Closing Date">
+							<h:outputText value="#{contract.creationDate}" >
+								<f:convertDateTime pattern="dd.MM.yyyy HH:mm" timeZone="Europe/Berlin"/>
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Action">
+							<p:commandLink immediate="true" action="#{navi.viewConcludedContract}">
+								<f:setPropertyActionListener target="#{cdc.dataContract}" value="#{contract}" />
+								<h:outputText value="View" style="margin-left: 1em; margin-right: 1em;" />
+							</p:commandLink>
+							<p:commandLink immediate="true" action="#{navi.monitorConcludedContract}">
+								<f:setPropertyActionListener target="#{dc_monitor_quality.dataContract}" value="#{contract}" />
+								<h:outputText value="Monitor" style="margin-left: 1em; margin-right: 1em;"/>
+							</p:commandLink>
+							<p:commandLink immediate="true" action="#{navi.rateConcludedContract}">
+								<f:setPropertyActionListener target="#{cdc.dataContract}" value="#{contract}" />
+								<h:outputText value="Rate" style="margin-left: 1em; margin-right: 1em;"/>
+							</p:commandLink>
+							<p:commandLink immediate="true" action="#{monitor_concluded_dc.monitor}" rendered="#{!contract.monitoring}">
+								<f:setPropertyActionListener target="#{monitor_concluded_dc.dataContract}" value="#{contract}" />
+								<h:outputText value="Start Monitoring" style="margin-left: 1em; margin-right: 1em;"/>
+							</p:commandLink>
+							<p:commandLink immediate="true" action="#{monitor_concluded_dc.monitor}" rendered="#{contract.monitoring}">
+								<f:setPropertyActionListener target="#{monitor_concluded_dc.dataContract}" value="#{contract}" />
+								<h:outputText value="Stop Monitoring" style="margin-left: 1em; margin-right: 1em;"/>
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+					
+					<p:commandButton value="Back to Welcome" action="#{navi.welcome}" style="margin: 2em;" immediate="true" ajax="false" />
+					
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

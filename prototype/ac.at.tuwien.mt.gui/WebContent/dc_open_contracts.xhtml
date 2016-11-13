@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Providing Data - Open Contracts" />
+					</h2>
+
+					<h:messages id="messages" styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+						
+					<p:dataTable var="contract" value="#{open_dc_list.list}">
+						<p:column headerText="Date">
+							<h:outputText value="#{contract.creationDate}" >
+								<f:convertDateTime pattern="dd.MM.yyyy HH:mm" timeZone="Europe/Berlin"/>
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Status">
+							<h:panelGroup rendered="#{contract.party1Id eq ucb.person.personId}">
+								<h:outputText style="color: red;" value="Awaiting answer" rendered="#{contract.party1Accepted and !contract.party2Accepted}"/>
+								<h:outputText style="color: #22ff00;" value="Offer received" rendered="#{!contract.party1Accepted and contract.party2Accepted}"/>
+							</h:panelGroup>
+							<h:panelGroup rendered="#{contract.party2Id eq ucb.person.personId}">
+								<h:outputText style="color: red;" value="Awaiting answer" rendered="#{contract.party2Accepted and !contract.party1Accepted}"/>
+								<h:outputText style="color: #22ff00;" value="Offer received" rendered="#{!contract.party2Accepted and contract.party1Accepted}"/>
+							</h:panelGroup>
+						</p:column>
+						<p:column headerText="View Offer">
+							<p:commandLink immediate="true" action="#{navi.reviewOpenContract}">
+								<f:setPropertyActionListener target="#{rodc.contract}" value="#{contract}" />
+								<h:outputText value="View" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+					
+					<p:commandButton value="Back to Welcome" action="#{navi.welcome}" style="margin: 2em;" immediate="true" ajax="false" />
+					
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

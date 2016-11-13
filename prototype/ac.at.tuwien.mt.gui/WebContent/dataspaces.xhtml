@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Data Spaces Provider Overview" />
+					</h2>
+					<h3>
+						<h:outputText value="Please select the data space provider, from where you want to buy the data." />
+					</h3>
+					
+					<h:messages id="messages" styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+						
+					<p:dataTable var="person" value="#{dso.list}">
+						<p:column headerText="Name">
+							<h:outputText value="#{person.firstName} #{person.lastName}" rendered="#{person.personType eq 'NATURAL'}" />
+							<h:outputText value="#{person.companyName}" rendered="#{person.personType eq 'LEGAL'}" />
+						</p:column>
+						<p:column headerText="Person Type">
+							<h:outputText value="#{person.personType}" />
+						</p:column>
+						<p:column headerText="View Dataspace">
+							<p:commandLink immediate="true" action="#{navi.dataspaceThings}">
+								<f:setPropertyActionListener target="#{conclude_dc.personId}" value="#{person.personId}" />
+								<h:outputText value="View" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+					
+					<p:commandButton value="Back to Welcome" action="#{navi.welcome}" style="margin: 2em;" immediate="true" ajax="false" />
+					
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

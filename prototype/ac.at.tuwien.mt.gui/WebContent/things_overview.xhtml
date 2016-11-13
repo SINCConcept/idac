@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Thing Maintenance" />
+					</h2>
+
+					<h:messages id="messages" styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+						
+					<p:dataTable var="thing" value="#{tob.things}">
+						<p:column headerText="Thing ID">
+							<h:outputText value="#{thing.resourceId}" />
+						</p:column>
+						<p:column headerText="Added since">
+							<h:outputText value="#{thing.creationDate}" >
+								<f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Edit">
+							<p:commandLink immediate="true" action="#{navi.thingUpdate}" actionListener="#{tcb.setUpdateMode}">
+								<f:setPropertyActionListener target="#{tcb.thing}" value="#{thing}" />
+								<h:outputText value="Edit" />
+							</p:commandLink>
+						</p:column>
+						<p:column headerText="Clone">
+							<p:commandLink immediate="true" action="#{navi.thingClone}" actionListener="#{tcb.setCloneMode}">
+								<f:setPropertyActionListener target="#{tcb.thing}" value="#{thing}" />
+								<h:outputText value="Clone" />
+							</p:commandLink>
+						</p:column>
+						<p:column headerText="Delete">
+							<p:commandLink immediate="true" action="#{navi.thingDelete}">
+								<f:setPropertyActionListener target="#{tcb.thing}" value="#{thing}" />
+								<h:outputText value="Delete" />
+							</p:commandLink>
+						</p:column>
+						<!-- Monitoring disabled for single Things 
+						<p:column headerText="Monitoring">
+							<p:commandLink immediate="true" action="#{navi.thingQualityMonitor}">
+								<f:setPropertyActionListener target="#{t_monitor_quality.thingId}" value="#{thing.thingId}" />
+								<h:outputText value="View Quality" />
+							</p:commandLink>
+						</p:column>
+					 	-->
+					</p:dataTable>
+					
+					<p:commandButton value="Back to Welcome" action="#{navi.welcome}" style="margin: 2em;" immediate="true" ajax="false" />
+					
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

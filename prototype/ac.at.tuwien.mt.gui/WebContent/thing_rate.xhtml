@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center; width: 100%;">
+					<h2>
+						<h:outputText value="Rating Thing" />
+					</h2>
+
+					<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+
+					<h:panelGrid columns="2">
+						<h:outputText value="Thing ID: " />
+						<h:outputText value="#{thing_rate.thing.thingId}" />
+
+						<h:outputText value="Your Rating: " />
+						<p:rating value="#{thing_rate.rating}" disabled="#{thing_rate.rated}" />
+					</h:panelGrid>
+					
+					<br/>
+					
+					<p:commandButton disabled="#{thing_rate.rated}" value="Submit" action="#{thing_rate.rate}" style="margin: 2em;" ajax="false" />
+					
+					<br/>
+					
+					<p:commandButton value="Back" action="#{navi.rateConcludedContract}" style="margin: 2em;" ajax="false" />
+					
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

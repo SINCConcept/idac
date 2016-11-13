@@ -1,0 +1,23 @@
+.twocol1 {
+	width: 50%;
+	text-align: right;
+}
+
+.twocol2 {
+	width: 50%;
+	text-align: left;
+}
+
+.dc_table {
+	width: 100%;
+}
+
+.dc_table_col1_2 {
+	width: 50%;
+	text-align: left;
+}
+
+.dc_table_col1_2_middle {
+	width: 50%;
+	text-align: center;
+}

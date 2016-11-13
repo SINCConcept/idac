@@ -1,0 +1,128 @@
+@CHARSET "UTF-8";
+
+html {
+	/* 	nothing here */
+	
+}
+
+body {
+	font-family: verdana,cambria,georgia,helvetica,arial,sans-serif;
+}
+
+.wrapper {
+	position: absolute;
+	min-height: 100%;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+h1 {
+	margin: 1em !important;
+	font-size: 2em !important;
+	color: #369;
+}
+
+h2 {
+	margin: 0.8em !important;
+	font-size: 1.5em !important;
+	font-weight: normal;
+	color: #369;
+}
+
+h3 {
+	font-weight: normal;
+	color: #369;
+}
+
+.ui-inputfield {
+	box-shadow: none !important;
+	border-radius: 0px !important;
+}
+
+/* anchor and input style */
+.button {
+	margin: 1em;
+	font-size: 1em;
+}
+
+.jsfMessages {
+	list-style: none;
+	padding: 0em;
+}
+
+.jsfMessages ul {
+	list-style: none;
+	text-align: left;
+	margin: 0.5em;
+	padding-bottom: 1em;
+}
+
+.errorMessages {
+	background-color: #f2dede;
+	color: #FF0000;
+	border-radius: 3px;
+	margin: 0.5em 0;
+	padding: 0.5em 1em;
+}
+
+.infoMessages {
+	background-color: #acfbb0;
+	border-color: red;
+	color: #038107;
+	border-radius: 3px;
+	margin: 0.5em 0;
+	padding: 0.5em 1em;
+}
+
+.warnMessages {
+	background-color: #ffff77;
+	border-color: red;
+	color: #000000;
+	border-radius: 3px;
+	margin: 0.5em 0;
+	padding: 0.5em 1em;
+}
+
+.ui-button {
+	border-radius: 0 !important;
+}
+
+.ui-widget {
+	font-size: 1em !important; 
+}
+
+.menu_panel_col1 {
+	vertical-align: top;
+	width: 20%;
+}
+
+.menu_panel_col2 {
+	vertical-align: top;
+}
+
+.menu_panel_col1 .ui-widget-content a {
+	color: #000000;
+}
+
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+	border-bottom-right-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	border-top-left-radius: 0px !important;
+}
+
+.menu_panel_col1 .ui-panelmenu-header {
+	color: #000000;
+}
+
+.menu_panel_col1 .ui-state-active a, .menu_panel_col1 .ui-state-active a:link,
+	.menu_panel_col1 .ui-state-active a:visited , .menu_panel_col1 .ui-state-active a:hover{
+	color: #000000 !important;
+}
+
+.menu_panel_col1 .ui-state-hover {
+	background: #3797df !important;
+	color: #ffffff !important;
+}

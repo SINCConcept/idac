@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<div style="text-align: center; width: 100%; margin-bottom: 5em;">
+				<h1>
+					<h:outputText value="#{msg.title}" />
+				</h1>
+				<h2>
+					<h:outputText value="Legal Person Registration" />
+				</h2>
+				<br/>
+				<h3>
+					<h:outputText value="Step 2 of 2: Fill in the following information!" />
+				</h3>
+				<h:panelGrid columns="1" cellspacing="10" style="text-align: center; width: 100%;">
+
+					<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+					
+		          	<h:panelGrid columns="3" cellpadding="10" style="text-align: center; margin: 0 auto;" columnClasses="regcol1, regcol2, regcol3">
+		                <h:outputText value="Company Name" />
+						<p:inputText id="legal_company_name" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.legalPerson.companyName}"
+							required="true" requiredMessage="Please enter the company name.">
+						</p:inputText>
+						<p:watermark for="legal_company_name" value="Company Name" />
+						
+						<h:outputText value="Registration number" />
+						<p:inputText id="registrationNumber" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.legalPerson.registrationNumber}"
+							required="true" requiredMessage="Please enter the registration number.">
+						</p:inputText>
+						<p:watermark for="registrationNumber" value="Registration number" />
+		                
+		                <h:outputText value="#{msg.email}"/>
+		                <p:inputText id="legal_email" styleClass="inputField" autocomplete="off"
+							style="width: 12em;" value="#{rcb.legalPerson.email}"
+							required="true" requiredMessage="#{msg.error_email_missing}"
+							validatorMessage="#{msg.error_valid_email_missing}">
+							<f:validateRegex pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}" />
+						</p:inputText>
+						<p:watermark for="legal_email" value="#{msg.email}" />
+						
+						<h:outputText value="#{msg.password}"/>
+						<p:password id="legal_password" styleClass="inputField" autocomplete="off"
+							style="width: 12em;" value="#{rcb.legalPerson.password}"
+							required="true" requiredMessage="#{msg.error_password_missing}"
+							feedback="true" />
+						<p:watermark for="legal_password" value="#{msg.password}" />
+						
+						<h:outputText value="#{msg.password_confirmation}"/>
+						<p:password id="legal_passwordRepeat" styleClass="inputField" autocomplete="off"
+							style="width: 12em;" value="#{rcb.passwordRepeat}"
+							required="true" requiredMessage="#{msg.error_password_missing}"	/>
+						<p:watermark for="legal_passwordRepeat" value="#{msg.password_confirmation}" />
+						
+		                <h:outputText value="Address" style="color: #369; font-size: 1.2em;"/>
+						<h:outputText value=" "/>
+						<h:outputText value=" "/>
+						
+						<h:outputText value="Street" />
+						<p:inputText id="legal_street" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.legalPerson.address.street}"
+							required="true" requiredMessage="Please enter the street">
+						</p:inputText>
+						<p:watermark for="legal_street" value="Street" />
+						
+						<h:outputText value="Number" />
+						<p:inputText id="legal_number" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.legalPerson.address.number}"
+							required="true" requiredMessage="Please enter the number">
+						</p:inputText>
+						<p:watermark for="legal_number" value="Number" />
+						
+						<h:outputText value="City" />
+						<p:inputText id="legal_city" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.legalPerson.address.city}"
+							required="true" requiredMessage="Please enter the number">
+						</p:inputText>
+						<p:watermark for="legal_city" value="City" />
+						
+						<h:outputText value="ZIP Code" />
+						<p:inputText id="legal_zipcode" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.legalPerson.address.zipCode}"
+							required="true" requiredMessage="Please enter the number">
+						</p:inputText>
+						<p:watermark for="legal_zipcode" value="ZIP Code" />
+						
+						<h:outputText value="Country" />
+						<p:inputText id="legal_country" styleClass="inputField"
+							style="width: 12em;" value="#{rcb.legalPerson.address.country}"
+							required="true" requiredMessage="Please enter the country">
+						</p:inputText>
+						<p:watermark for="legal_country" value="Country" />
+                 	</h:panelGrid>
+
+					<br/>
+		            <p:commandButton value="#{msg.register}" action="#{rcb.registerLegal}" ajax="false">
+		            </p:commandButton>
+
+					<br/>
+					<p:commandLink id="register" action="#{navi.login}"	immediate="true">
+						<h:outputText value="#{msg.back_to_login}" />
+					</p:commandLink>
+
+				</h:panelGrid>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

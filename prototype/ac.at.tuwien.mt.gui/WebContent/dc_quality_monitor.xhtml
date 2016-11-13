@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Quality Assurance Monitoring for Data Contract: #{dc_monitor_quality.dataContract.dataContractMetaInfo.contractId}" />
+					</h2>
+					
+					<p:dataTable var="mdc" value="#{dc_monitor_quality.monitoredDataContracts}">
+						<p:column headerText="Monitored Quality">
+							<h:panelGrid columns="2" cellspacing="10" cellpadding="5" style="text-align: left; margin: 0 auto;">
+								<h:outputText value="Monitoring Start" />
+								<h:outputText value="#{mdc.monitoringStart}" >
+									<f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss.SSSZ"/>
+								</h:outputText>
+								
+								<h:outputText value="Monitoring End" />
+								<h:outputText value="#{mdc.monitoringEnd}" >
+									<f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss.SSSZ"/>
+								</h:outputText>
+								
+								<p:dataTable var="mqod" value="#{mdc.monitoredQoD}">
+									<p:column headerText="Monitored Quality of Data">
+									<h:panelGrid columns="2" cellspacing="10" cellpadding="5" style="text-align: left; margin: 0 auto;">
+									
+									<h:outputText value="Thing ID" />
+									<h:outputText value="#{mqod.thingId}" />
+								
+									<h:outputText value="Number of samples" />
+									<h:outputText value="#{mqod.totalNrOfSamples}"/>
+									
+									<h:outputText value="Messages Completeness (in %)" />
+									<h:outputText value="#{mqod.completeness}">
+										<f:convertNumber locale="de" minFractionDigits="3" maxFractionDigits="3"/>
+									</h:outputText>
+			
+									<h:outputText value="Messages Conformity (in %)" />
+									<h:outputText value="#{mqod.conformity}">
+										<f:convertNumber locale="de" minFractionDigits="3" maxFractionDigits="3"/>
+									</h:outputText>
+			
+									<h:outputText value="Average Message Age (in ms)" />
+									<h:outputText value="#{mqod.averageAge}">
+										<f:convertNumber locale="de" minFractionDigits="3" maxFractionDigits="3"/>
+									</h:outputText>
+			
+									<h:outputText value="Average Message Currency (in ms)" />
+									<h:outputText value="#{mqod.averageCurrency}">
+										<f:convertNumber locale="de" minFractionDigits="3" maxFractionDigits="3"/>
+									</h:outputText>
+									
+									</h:panelGrid>
+									</p:column>
+								</p:dataTable>			
+								
+								<p:dataTable var="mqos" value="#{mdc.monitoredQoS}">
+									<p:column headerText="Monitored Quality of Service">
+									<h:panelGrid columns="2" cellspacing="10" cellpadding="5" style="text-align: left; margin: 0 auto;">
+									
+									<h:outputText value="Availability (in %)"/>
+									<h:outputText value="#{mqos.availability}">
+										<f:convertNumber locale="de" minFractionDigits="3" maxFractionDigits="3"/>
+									</h:outputText>
+				
+									<h:outputText value="First Message Receival"/>
+									<h:outputText value="#{mqos.firstMessageReceival}" />
+				
+									<h:outputText value="Last Message Receival"/>
+									<h:outputText value="#{mqos.lastMessageReceival}" />
+									</h:panelGrid>
+									</p:column>
+								</p:dataTable>	
+								
+							</h:panelGrid>
+						</p:column>
+					
+					</p:dataTable>
+					
+					<p:commandButton value="Back to Concluded Contracts" action="#{navi.listConcludedContracts}" style="margin: 2em;" immediate="true" ajax="false" />
+					
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

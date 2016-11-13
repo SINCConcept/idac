@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="template.xhtml">
+		<ui:define name="content">
+			<h:form id="main">
+				<div style="text-align: center;">
+					<h2>
+						<h:outputText value="Concluding Data Contract" />
+					</h2>
+					
+					<p:dataTable var="thing" value="#{conclude_dc.selectedThings}">
+						<f:facet name="header">
+				            Selected Things
+				        </f:facet>
+						<p:column >
+							<p:accordionPanel>
+								<p:tab title="#{thing.thingId}">
+									<h:panelGrid columns="2" cellpadding="10">
+										<h:outputText value="Resource ID" />
+										<h:outputText value="#{thing.resourceId}" />
+										<h:outputText value="Description" />
+										<h:outputText value="#{thing.description}" />
+									</h:panelGrid>
+								</p:tab>
+								<p:tab title="Data Sample">
+									<h:panelGrid columns="1" cellpadding="10">
+										<h:outputText value="#{thing.dataSample}" />
+									</h:panelGrid>
+								</p:tab>
+								<p:tab title="Thing Quality of Data and Service">
+									<h:panelGrid columns="2" cellpadding="10">
+										<h:outputText value="Completeness (%)" />
+										<h:outputText value="#{thing.qod.completeness}" />
+										
+										<h:outputText value="Conformity (%)" />
+										<h:outputText value="#{thing.qod.conformity}" />
+										
+										<h:outputText value="Accuracy (in %)" />
+										<h:outputText value="#{thing.qod.accuracy}" />
+										
+										<h:outputText value="Consistency (in %)" />
+										<h:outputText value="#{thing.qod.consistency}" />
+										
+										<h:outputText value="Timeliness (in ms)" />
+										<h:outputText value="#{thing.qod.timeliness}" />
+
+										<h:outputText value="Broadcasting Frequency (in ms)"/>
+										<h:outputText value="#{thing.qos.frequency}" />
+
+										<h:outputText value="Availability (in %)" />
+										<h:outputText value="#{thing.qos.availability}" />
+									</h:panelGrid>
+								</p:tab>
+							</p:accordionPanel>
+						</p:column>
+					</p:dataTable>
+					
+					<p:wizard style="margin-top: 1em;">
+						<p:tab id="deviceDataRights" title="Data Rights">
+							<p:panel header="Data Rights">
+								<h:panelGrid columns="2" cellspacing="10" columnClasses="regcol1, regcol2" styleClass="regtable">
+									<h:outputText value="Data Derivation"/>
+									<p:selectBooleanButton value="#{conclude_dc.dataContract.dataRights.derivation}" onLabel="Yes" offLabel="No" />
+									
+									<h:outputText value="Data Collection"/>
+									<p:selectBooleanButton value="#{conclude_dc.dataContract.dataRights.collection}" onLabel="Yes" offLabel="No" />
+									
+									<h:outputText value="Data Reproduction"/>
+									<p:selectBooleanButton value="#{conclude_dc.dataContract.dataRights.reproduction}" onLabel="Yes" offLabel="No" />
+									
+									<h:outputText value="Commercial Usage"/>
+									<p:selectBooleanButton value="#{conclude_dc.dataContract.dataRights.commercialUsage}" onLabel="Yes" offLabel="No" />
+									
+								</h:panelGrid>
+								<br/>
+								<p:commandButton value="Back to Things" action="#{navi.dataspaceThings}" style="text-align: left;" ajax="false" />
+							</p:panel>
+						</p:tab>
+						<p:tab id="devicePricingModel" title="Pricing Model">
+							<p:panel header="Pricing Model">
+								<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+								<h:panelGrid columns="3" cellspacing="10" columnClasses="regcol1, regcol2, regcol3" styleClass="regtable">
+									<h:outputText value="Currency" />
+									<p:selectOneMenu id="car" value="#{conclude_dc.dataContract.pricingModel.currency}" >
+										<f:selectItem itemLabel="EUR" itemValue="EUR" />
+										<f:selectItem itemLabel="USD" itemValue="USD" />
+									</p:selectOneMenu>
+									<h:outputText value=""/>
+									
+									<h:outputText value="Price"/>
+									<p:inputText id="pm_price" value="#{conclude_dc.dataContract.pricingModel.price}" 
+										required="true"
+										requiredMessage="Please provide a value!"
+										converterMessage="Please provide a number between 0.001 and 1000000."
+										validatorMessage="Please provide a number between 0.001 and 1000000." title="Number representing the value e.g., 0.01 or 100">
+										<f:validateDoubleRange minimum="0.001" maximum="1000000" />
+									</p:inputText>
+									<p:watermark for="pm_price" value="0.01" />
+									
+									<h:outputText value="Payment"/>
+									<p:selectOneRadio value="#{conclude_dc.dataContract.pricingModel.transaction}" immediate="true"  > 
+										<f:selectItem itemLabel="Transaction" itemValue="true"  />
+			           					<f:selectItem itemLabel="Subscription" itemValue="false" />
+			           					<f:ajax render="@form" execute="@this pm_price"/>
+									</p:selectOneRadio>
+									<h:outputText value=""/>
+									
+									<h:outputText value="Number of transactions" rendered="#{conclude_dc.dataContract.pricingModel.transaction}" />
+									<p:inputText id="nr_trans" value="#{conclude_dc.dataContract.pricingModel.numberOfTransactions}" 
+										rendered="#{conclude_dc.dataContract.pricingModel.transaction}"
+										required="true"
+										requiredMessage="Please provide a value!"
+										converterMessage="Please provide a number between 1 and 1000000."
+										validatorMessage="Invalid number format" title="Number representing the value e.g., 1 or 100">
+										<f:validateLongRange minimum="1" maximum="1000000" />
+									</p:inputText>
+									<p:watermark for="nr_trans" value="100" rendered="#{conclude_dc.dataContract.pricingModel.transaction}" />
+									
+									<h:outputText value="Start date" rendered="#{!conclude_dc.dataContract.pricingModel.transaction}"/>
+									<p:calendar value="#{conclude_dc.dataContract.pricingModel.subscription.startDate}" 
+										required="true"
+										requiredMessage="Please provide a value!"
+										pattern="dd.MM.yyyy HH:mm:ss" rendered="#{!conclude_dc.dataContract.pricingModel.transaction}"/>
+									<h:outputText value="" rendered="#{!conclude_dc.dataContract.pricingModel.transaction}"/>
+									
+									<h:outputText value="End date" rendered="#{!conclude_dc.dataContract.pricingModel.transaction}"/>
+									<p:calendar value="#{conclude_dc.dataContract.pricingModel.subscription.endDate}" 
+										required="true"
+										requiredMessage="Please provide a value!"
+										pattern="dd.MM.yyyy HH:mm:ss" rendered="#{!conclude_dc.dataContract.pricingModel.transaction}"/>
+									<h:outputText value="" rendered="#{!conclude_dc.dataContract.pricingModel.transaction}"/>
+									
+									<h:outputText value="Broker URL" rendered="#{!conclude_dc.dataContract.pricingModel.transaction}" />
+									<p:inputText id="brokerURL" value="#{conclude_dc.dataContract.pricingModel.subscription.brokerURL}" 
+										rendered="#{!conclude_dc.dataContract.pricingModel.transaction}"
+										required="true"
+										requiredMessage="Please provide a value!">
+									</p:inputText>
+									<p:watermark for="brokerURL" value="tcp://xxx.xxx.xxx.xxx:61616" rendered="#{!conclude_dc.dataContract.pricingModel.transaction}"/>
+									
+									<h:outputText value="Queue Name" rendered="#{!conclude_dc.dataContract.pricingModel.transaction}" />
+									<p:inputText id="queueName" value="#{conclude_dc.dataContract.pricingModel.subscription.queueName}" 
+										rendered="#{!conclude_dc.dataContract.pricingModel.transaction}"
+										required="true"
+										requiredMessage="Please provide a value!">
+									</p:inputText>
+									<p:watermark for="queueName" value="myQueueName" rendered="#{!conclude_dc.dataContract.pricingModel.transaction}"/>
+								</h:panelGrid>
+							</p:panel>
+						</p:tab>
+						<p:tab id="devicePurchasingPolicy" title="Purchasing Policy">
+							<p:panel header="Purchasing Policy">
+								<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+								<h:panelGrid columns="3" cellspacing="10" columnClasses="regcol1, regcol2, regcol3" styleClass="regtable">
+									<h:outputText value="Contract termination" />
+									<h:inputTextarea id="contractTermination" value="#{conclude_dc.dataContract.purchasingPolicy.contractTermination}" cols="50"/>
+									<p:watermark for="contractTermination" value="Sample Clause..."/>
+									
+									<h:outputText value="Refund" />
+									<h:inputTextarea id="refunds" value="#{conclude_dc.dataContract.purchasingPolicy.refund}" cols="50" />
+									<p:watermark for="refunds" value="Sample Clause..."/>
+									
+									<h:outputText value="Shipping" />
+									<h:inputTextarea id="shipping" value="#{conclude_dc.dataContract.purchasingPolicy.shipping}" cols="50" />
+									<p:watermark for="shipping" value="Sample Clause..."/>
+								</h:panelGrid>
+							</p:panel>
+						</p:tab>
+						<p:tab id="controlAndRelationship" title="Control and Relationship">
+							<p:panel header="Control and Relationship">
+								<h:messages styleClass="jsfMessages" errorClass="errorMessages" infoClass="infoMessages" />
+								<h:panelGrid columns="3" cellspacing="10" columnClasses="regcol1, regcol2, regcol3" styleClass="regtable">
+									<h:outputText value="Warranty" />
+									<h:inputTextarea id="warranty" value="#{conclude_dc.dataContract.controlAndRelationship.warranty}" cols="50" />
+									<p:watermark for="warranty" value="Sample Clause..."/>
+									
+									<h:outputText value="Indemnity" />
+									<h:inputTextarea id="indemnity" value="#{conclude_dc.dataContract.controlAndRelationship.indemnity}" cols="50" />
+									<p:watermark for="indemnity" value="Sample Clause..."/>
+									
+									<h:outputText value="Liability" />
+									<h:inputTextarea id="liability" value="#{conclude_dc.dataContract.controlAndRelationship.liability}" cols="50" />
+									<p:watermark for="liability" value="Sample Clause..."/>
+									
+									<h:outputText value="Juristiction" />
+									<h:inputTextarea id="juristiction" value="#{conclude_dc.dataContract.controlAndRelationship.juristiction}" cols="50" />
+									<p:watermark for="juristiction" value="Sample Clause..."/>
+								</h:panelGrid>
+								
+								<p:commandButton value="Send Contract Offer" action="#{conclude_dc.sendOffer}" ajax="false" />
+							</p:panel>
+						</p:tab>
+					</p:wizard>
+					
+					<br/>
+					
+					<br/>
+					
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
