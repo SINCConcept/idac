@@ -19,10 +19,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 
-import ac.at.tuwien.mt.dao.monitor.ThingMonitorQoDDAO;
-import ac.at.tuwien.mt.dao.monitor.ThingMonitorQoSDAO;
-import ac.at.tuwien.mt.model.exception.InvalidObjectException;
-import ac.at.tuwien.mt.model.exception.ResourceOutOfDateException;
 import ac.at.tuwien.mt.model.helper.DefaultDateProvider;
 import ac.at.tuwien.mt.model.thing.Thing;
 import ac.at.tuwien.mt.model.thing.ThingMessage;
@@ -32,7 +28,6 @@ import ac.at.tuwien.mt.model.thing.message.MetaModel;
 import ac.at.tuwien.mt.model.thing.message.Property;
 import ac.at.tuwien.mt.model.thing.monitor.MonitoredQoD;
 import ac.at.tuwien.mt.model.thing.monitor.MonitoredQoS;
-import ac.at.tuwien.mt.monitoring.thread.internal.MonitoringProcessingHelper;
 
 /**
  * @author Florin Bogdan Balint
@@ -56,18 +51,12 @@ public class MessageMonitor {
 	private long age = -1;
 	private long currency = -1;
 
-	// DAOs to update the current monitoring status
-	private ThingMonitorQoDDAO thingMonitorQoDDAO;
-	private ThingMonitorQoSDAO thingMonitorQoSDAO;
-
 	// the monitored qod - the same one as saved in the db
 	private MonitoredQoD monitoredQoD;
 	// the monitored qos - the same one as saved in the db
 	private MonitoredQoS monitoredQoS;
 
-	public MessageMonitor(ThingMessage thingMessage, ThingMonitorQoDDAO thingMonitorQoDDAO, ThingMonitorQoSDAO thingMonitorQoSDAO) {
-		this.thingMonitorQoDDAO = thingMonitorQoDDAO;
-		this.thingMonitorQoSDAO = thingMonitorQoSDAO;
+	public MessageMonitor(ThingMessage thingMessage) {
 		this.message = thingMessage.getMessage();
 		this.thing = thingMessage.getThing();
 		this.thingMessage = thingMessage;
@@ -83,59 +72,14 @@ public class MessageMonitor {
 		computeAgeAndCurrency();
 
 		// Create a new entry
-		this.monitoredQoD = getFirstMonitoredQoDEntry();
-
-		// save the values in the database
-		// updateQoDValuesInDB();
+		this.monitoredQoD = getMonitoredQoDEntry();
 	}
 
 	public void monitorQoS() {
-		this.monitoredQoS = getFirstMonitoredQoSEntry();
-		// updateQoSValuesInDB();
+		this.monitoredQoS = getMonitoredQoSEntry();
 	}
 
-	private void updateQoSValuesInDB() {
-		// see if there is an existing entry
-		MonitoredQoS foundEntry = thingMonitorQoSDAO.find(thing.getThingId());
-		if (foundEntry == null) {
-			// if not insert the first entry and return - nothing else to do.
-			thingMonitorQoSDAO.insert(monitoredQoS);
-			return;
-		}
-
-		// otherwise compute the new values
-		foundEntry = MonitoringProcessingHelper.computeNewValues(foundEntry, monitoredQoS);
-
-		// update
-		try {
-			thingMonitorQoSDAO.update(foundEntry);
-		} catch (ResourceOutOfDateException | InvalidObjectException e) {
-			// object might have been updated in the mean time -> retry
-			updateQoSValuesInDB();
-		}
-	}
-
-	private void updateQoDValuesInDB() {
-		// see if there are any existing entries
-		MonitoredQoD foundEntry = thingMonitorQoDDAO.find(thing.getThingId());
-		if (foundEntry == null) {
-			// if not insert them
-			thingMonitorQoDDAO.insert(monitoredQoD);
-			return;
-		}
-		// otherwise compute the new values
-		foundEntry = MonitoringProcessingHelper.computeNewValues(foundEntry, monitoredQoD);
-
-		// update
-		try {
-			thingMonitorQoDDAO.update(foundEntry);
-		} catch (ResourceOutOfDateException | InvalidObjectException e) {
-			// object might have been updated in the mean time -> retry
-			updateQoDValuesInDB();
-		}
-	}
-
-	private MonitoredQoD getFirstMonitoredQoDEntry() {
+	private MonitoredQoD getMonitoredQoDEntry() {
 		MonitoredQoD monitoredQoD = new MonitoredQoD();
 		monitoredQoD.setThingId(thing.getThingId());
 		monitoredQoD.setTotalNrOfSamples(1);
@@ -158,7 +102,7 @@ public class MessageMonitor {
 		return monitoredQoD;
 	}
 
-	private MonitoredQoS getFirstMonitoredQoSEntry() {
+	private MonitoredQoS getMonitoredQoSEntry() {
 		MonitoredQoS monitoredQoS = new MonitoredQoS();
 		monitoredQoS.setThingId(thing.getThingId());
 		monitoredQoS.setTotalNrOfSamples(1);

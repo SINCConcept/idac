@@ -11,17 +11,19 @@
 
 package ac.at.tuwien.mt.monitoring.component;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClient;
@@ -29,11 +31,7 @@ import com.mongodb.MongoClient;
 import ac.at.tuwien.mt.dao.datacontract.DataContractDAO;
 import ac.at.tuwien.mt.dao.datacontract.impl.DataContractDAOImpl;
 import ac.at.tuwien.mt.dao.monitor.MonitoredDataContractDAO;
-import ac.at.tuwien.mt.dao.monitor.ThingMonitorQoDDAO;
-import ac.at.tuwien.mt.dao.monitor.ThingMonitorQoSDAO;
 import ac.at.tuwien.mt.dao.monitor.impl.MonitoredDataContractDAOImpl;
-import ac.at.tuwien.mt.dao.monitor.impl.ThingMonitorQoDDAOImpl;
-import ac.at.tuwien.mt.dao.monitor.impl.ThingMonitorQoSDAOImpl;
 import ac.at.tuwien.mt.dao.thing.ThingDAO;
 import ac.at.tuwien.mt.dao.thing.impl.ThingDAOImpl;
 import ac.at.tuwien.mt.model.datacontract.DataContract;
@@ -66,96 +64,81 @@ public class QueueMonitoringComponent {
 	@Value("${mongo_db_collection_dc_monitor}")
 	private String monitorDCCollection;
 
-	private static Map<String, List<DataContract>> thingDataContractMap = new HashMap<String, List<DataContract>>();
-	private static Map<String, Thing> thingMap = new HashMap<String, Thing>();
+	private static Map<String, Map<Thing, List<DataContract>>> qm = Collections.synchronizedMap(new HashMap<>());
 
 	private ThingDAO thingDAO;
 	private DataContractDAO dataContractDAO;
-	private ThingMonitorQoDDAO thingMonitorQoDDAO;
-	private ThingMonitorQoSDAO thingMonitorQoSDAO;
 	private MonitoredDataContractDAO monitoredDataContractDAO;
-
-	private static List<QueueInfo> queues = Collections.synchronizedList(new ArrayList<QueueInfo>());
 
 	@Autowired
 	public QueueMonitoringComponent(MongoClient mongoClient) {
 		this.mongoClient = mongoClient;
 	}
 
-	// @Scheduled(cron = "*/120 * * * * ?")
+	@Scheduled(cron = "*/60 * * * * ?")
 	public void garbageCollect() {
 		System.gc();
 	}
 
-	// @Scheduled(cron = "*/120 * * * * ?")
+	@Scheduled(cron = "*/60 * * * * ?")
 	public void initInternalCachingMaps() {
 		LOGGER.debug("Setting up");
 		List<QueueInfo> queueInfos = QueueMonitoringManager.getInstance().getQueueInfos();
 		synchronized (queueInfos) {
-			synchronized (queues) {
+			synchronized (qm) {
+				qm.clear();
 				for (QueueInfo queueInfo : queueInfos) {
 					// get the thing id
 					final String thingId = queueInfo.getThingId();
 
-					// get all the contracts which we should monitor
 					List<DataContract> foundDataContracts = getDataContractDAO().findDataContracts(thingId);
-					thingDataContractMap.remove(thingId);
-					thingDataContractMap.put(thingId, foundDataContracts);
-
-					// get the thing
-					final Thing thing = getThingDAO().getThing(thingId);
-					thingMap.remove(thingId);
-					thingMap.put(thingId, thing);
+					Thing thing = getThingDAO().getThing(thingId);
 
 					boolean found = false;
-					for (QueueInfo qi : queues) {
-						if (qi.getBrokerURL().equals(queueInfo.getBrokerURL()) && qi.getQueueName().equals(queueInfo.getQueueName())) {
+					String keyToCompare = queueInfo.getBrokerURL() + ";" + queueInfo.getQueueName();
+					Set<Entry<String, Map<Thing, List<DataContract>>>> entrySet = qm.entrySet();
+					for (Entry<String, Map<Thing, List<DataContract>>> entry : entrySet) {
+						String key = entry.getKey();
+						if (key.equals(keyToCompare)) {
 							found = true;
 						}
 					}
+					Map<Thing, List<DataContract>> tcmap = new HashMap<>();
+					tcmap.put(thing, foundDataContracts);
 					if (!found) {
-						queues.add(queueInfo);
+						qm.put(keyToCompare, tcmap);
+					} else {
+						qm.get(keyToCompare).put(thing, foundDataContracts);
 					}
 				}
 			}
 		}
 	}
 
-	// @Scheduled(cron = "*/10 * * * * ?")
+	@Scheduled(cron = "*/10 * * * * ?")
 	public void readQueues() {
-		LOGGER.debug("Reading messages");
-		if (thingDataContractMap.isEmpty()) {
+		LOGGER.debug("Reading queues: ");
+		if (qm.isEmpty()) {
 			initInternalCachingMaps();
 		}
 
-		List<QueueInfo> queueInfos = QueueMonitoringManager.getInstance().getQueueInfos();
-		synchronized (queueInfos) {
+		synchronized (qm) {
+			LOGGER.debug(qm.size());
+			for (Entry<String, Map<Thing, List<DataContract>>> entry : qm.entrySet()) {
+				Map<Thing, List<DataContract>> value = entry.getValue();
+				for (Entry<Thing, List<DataContract>> entry2 : value.entrySet()) {
+					Thing value2 = entry2.getKey();
+					LOGGER.debug(value2.getThingId());
+				}
+			}
 
 			ExecutorService pool = Executors.newCachedThreadPool();
 
-			for (QueueInfo queueInfo : queueInfos) {
-				String thingId = queueInfo.getThingId();
-				List<DataContract> dataContracts = thingDataContractMap.get(thingId);
-				// failsafe
-				if (dataContracts == null) {
-					List<DataContract> foundDataContracts = getDataContractDAO().findDataContracts(thingId);
-					thingDataContractMap.remove(thingId);
-					thingDataContractMap.put(thingId, foundDataContracts);
-				}
-
-				Thing thing = thingMap.get(thingId);
-
-				// failsafe
-				if (thing == null) {
-					LOGGER.error("Thing could not be found, retrying.");
-					thing = getThingDAO().getThing(thingId);
-				}
-				if (thing != null) {
-					QueueMonitor monitor = new QueueMonitor(queueInfo, thing, dataContracts, getThingMonitorQoDDAO(), getThingMonitorQoSDAO(), getMonitoredDataContractDAO(), getDataContractDAO());
-					pool.submit(monitor);
-				} else {
-					LOGGER.error("Could not retrieve Thing from db for id: " + thingId);
-				}
+			Set<Entry<String, Map<Thing, List<DataContract>>>> entrySet = qm.entrySet();
+			for (Entry<String, Map<Thing, List<DataContract>>> entry : entrySet) {
+				QueueMonitor monitor = new QueueMonitor(entry.getKey(), entry.getValue(), getMonitoredDataContractDAO(),
+						getDataContractDAO());
+				pool.submit(monitor);
 			}
 
 			pool.shutdown();
@@ -184,26 +167,6 @@ public class QueueMonitoringComponent {
 			dataContractDAO = new DataContractDAOImpl(mongoClient, database, dataContractCollection);
 		}
 		return dataContractDAO;
-	}
-
-	/**
-	 * @return the thingMonitorQoSDAO
-	 */
-	public ThingMonitorQoSDAO getThingMonitorQoSDAO() {
-		if (thingMonitorQoSDAO == null) {
-			thingMonitorQoSDAO = new ThingMonitorQoSDAOImpl(mongoClient, database, monitorThingQoSCollection);
-		}
-		return thingMonitorQoSDAO;
-	}
-
-	/**
-	 * @return the thingMonitorQoDDAO
-	 */
-	public ThingMonitorQoDDAO getThingMonitorQoDDAO() {
-		if (thingMonitorQoDDAO == null) {
-			thingMonitorQoDDAO = new ThingMonitorQoDDAOImpl(mongoClient, database, monitorThingQoDCollection);
-		}
-		return thingMonitorQoDDAO;
 	}
 
 	/**

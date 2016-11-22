@@ -23,10 +23,6 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
-import ac.at.tuwien.mt.dao.monitor.ThingMonitorQoDDAO;
-import ac.at.tuwien.mt.dao.monitor.ThingMonitorQoSDAO;
-import ac.at.tuwien.mt.dao.monitor.impl.ThingMonitorQoDDAOImpl;
-import ac.at.tuwien.mt.dao.monitor.impl.ThingMonitorQoSDAOImpl;
 import ac.at.tuwien.mt.model.helper.DefaultDateProvider;
 import ac.at.tuwien.mt.model.helper.DefaultIDGenerator;
 import ac.at.tuwien.mt.model.thing.Thing;
@@ -44,8 +40,6 @@ import ac.at.tuwien.mt.monitoring.thread.MessageMonitor;
 public class QoDTest {
 
 	private static MongoClient mongoClient;
-	private static ThingMonitorQoDDAO qodDAO;
-	private static ThingMonitorQoSDAO qosDAO;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -57,14 +51,13 @@ public class QoDTest {
 		MongoClientOptions options = builder.build();
 
 		// set the credentials
-		MongoCredential credential = MongoCredential.createCredential("usermttest1", "mttest1_local", "usermttest1_31415".toCharArray());
+		MongoCredential credential = MongoCredential.createCredential("usermttest1", "mttest1_local",
+				"usermttest1_31415".toCharArray());
 		List<MongoCredential> list = new ArrayList<MongoCredential>();
 		list.add(credential);
 
 		ServerAddress serverAddress = new ServerAddress("localhost", 27017);
 		mongoClient = new MongoClient(serverAddress, list, options);
-		qodDAO = new ThingMonitorQoDDAOImpl(mongoClient, "mttest1_local", "mt.thing.monitor.qod");
-		qosDAO = new ThingMonitorQoSDAOImpl(mongoClient, "mttest1_local", "mt.thing.monitor.qos");
 	}
 
 	@AfterClass
@@ -80,7 +73,7 @@ public class QoDTest {
 		thing.getQos().setFrequency(10000);
 		thing.setMetaModel(getTestModel2());
 		ThingMessage thingMessage = new ThingMessage(thing, message, DefaultDateProvider.getCurrentTimeStamp());
-		MessageMonitor tm = new MessageMonitor(thingMessage, qodDAO, qosDAO);
+		MessageMonitor tm = new MessageMonitor(thingMessage);
 		tm.monitorQoD();
 		tm.monitorQoS();
 		Assert.assertTrue(tm.isComplete());
@@ -95,7 +88,7 @@ public class QoDTest {
 		thing.setMetaModel(getTestModel2());
 		thing.getQos().setFrequency(10000);
 		ThingMessage thingMessage = new ThingMessage(thing, message, DefaultDateProvider.getCurrentTimeStamp());
-		MessageMonitor tm = new MessageMonitor(thingMessage, qodDAO, qosDAO);
+		MessageMonitor tm = new MessageMonitor(thingMessage);
 		tm.monitorQoD();
 		tm.monitorQoS();
 		Assert.assertTrue(tm.isComplete());
@@ -110,7 +103,7 @@ public class QoDTest {
 		thing.setMetaModel(getTestModel2());
 		thing.getQos().setFrequency(10000);
 		ThingMessage thingMessage = new ThingMessage(thing, message, DefaultDateProvider.getCurrentTimeStamp());
-		MessageMonitor tm = new MessageMonitor(thingMessage, qodDAO, qosDAO);
+		MessageMonitor tm = new MessageMonitor(thingMessage);
 		tm.monitorQoD();
 		tm.monitorQoS();
 		Assert.assertFalse(tm.isComplete());
@@ -125,7 +118,7 @@ public class QoDTest {
 		thing.setMetaModel(getTestModel1());
 		thing.getQos().setFrequency(10000);
 		ThingMessage thingMessage = new ThingMessage(thing, message, DefaultDateProvider.getCurrentTimeStamp());
-		MessageMonitor tm = new MessageMonitor(thingMessage, qodDAO, qosDAO);
+		MessageMonitor tm = new MessageMonitor(thingMessage);
 		tm.monitorQoD();
 		tm.monitorQoS();
 		Assert.assertTrue(tm.isComplete());
@@ -140,7 +133,7 @@ public class QoDTest {
 		thing.setMetaModel(getTestModel1());
 		thing.getQos().setFrequency(10000);
 		ThingMessage thingMessage = new ThingMessage(thing, message, DefaultDateProvider.getCurrentTimeStamp());
-		MessageMonitor tm = new MessageMonitor(thingMessage, qodDAO, qosDAO);
+		MessageMonitor tm = new MessageMonitor(thingMessage);
 		tm.monitorQoD();
 		tm.monitorQoS();
 		Assert.assertTrue(tm.isComplete());
@@ -155,7 +148,7 @@ public class QoDTest {
 		thing.setMetaModel(getTestModel1());
 		thing.getQos().setFrequency(10000);
 		ThingMessage thingMessage = new ThingMessage(thing, message, DefaultDateProvider.getCurrentTimeStamp());
-		MessageMonitor tm = new MessageMonitor(thingMessage, qodDAO, qosDAO);
+		MessageMonitor tm = new MessageMonitor(thingMessage);
 		tm.monitorQoD();
 		tm.monitorQoS();
 		Assert.assertFalse(tm.isComplete());

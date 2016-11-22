@@ -37,7 +37,7 @@ import ac.at.tuwien.mt.model.thing.Thing;
 import ac.at.tuwien.mt.model.thing.rating.Rating;
 
 /**
- * @author White
+ * @author Florin Bogdan Balint
  *
  */
 public class RecommendingDAOImpl implements RecommendingDAO {
@@ -314,6 +314,60 @@ public class RecommendingDAOImpl implements RecommendingDAO {
 
 		int nextLong = random.nextInt(count - low);
 		FindIterable<Document> thingsList = mongoClient.getDatabase(database).getCollection(thingCollection).find(Filters.ne("ownerId", userId)).skip(nextLong);
+		for (Document document : thingsList) {
+			Thing thing = new Thing(document);
+			return thing;
+		}
+
+		return null;
+	}
+
+	@Override
+	public Thing recommendForTag(String tag) {
+		Thing thing = getTopRatedThingForTag(tag);
+
+		if (thing != null) {
+			return thing;
+		}
+
+		thing = getRandomThingForTag(tag);
+		if (thing != null) {
+			return thing;
+		}
+
+		return null;
+	}
+
+	@Override
+	public Thing getTopRatedThingForTag(String tag) {
+		Document toSearchFor = new Document();
+		toSearchFor.put("rating", -1);
+
+		MongoCollection<Document> collection = mongoClient.getDatabase(database).getCollection(thingCollection);
+		FindIterable<Document> list = collection.find(Filters.eq("tags", tag)).sort(toSearchFor).limit(1);
+		for (Document document : list) {
+			Thing thing = new Thing(document);
+			if (thing.getRating() != null && thing.getRating() != 0) {
+				return thing;
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public Thing getRandomThingForTag(String tag) {
+		int count = (int) mongoClient.getDatabase(database).getCollection(thingCollection).count(Filters.eq("tags", tag));
+		if (count == 0) {
+			return null;
+		}
+
+		// generate a random number
+		Random random = new Random();
+		int low = 0;
+
+		int nextLong = random.nextInt(count - low);
+		FindIterable<Document> thingsList = mongoClient.getDatabase(database).getCollection(thingCollection).find(Filters.eq("tags", tag)).skip(nextLong);
 		for (Document document : thingsList) {
 			Thing thing = new Thing(document);
 			return thing;

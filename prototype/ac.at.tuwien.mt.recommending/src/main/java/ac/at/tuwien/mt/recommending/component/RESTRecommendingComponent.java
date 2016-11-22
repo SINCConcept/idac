@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 import ac.at.tuwien.mt.model.exception.InvalidObjectException;
 import ac.at.tuwien.mt.recommending.beans.ThingAvgNegBean;
 import ac.at.tuwien.mt.recommending.beans.ThingRecommendationBean;
+import ac.at.tuwien.mt.recommending.beans.ThingTagRecommendationBean;
 
 /**
  * @author Florin Bogdan Balint
@@ -34,11 +35,13 @@ public class RESTRecommendingComponent extends RouteBuilder {
 	private static final Logger LOGGER = LogManager.getLogger(RESTRecommendingComponent.class);
 
 	private ThingRecommendationBean thingRecommendationBean;
+	private ThingTagRecommendationBean thingTagRecommendationBean;
 	private ThingAvgNegBean thingAvgNegBean;
 
 	@Autowired
-	public RESTRecommendingComponent(ThingRecommendationBean thingRecommendationBean, ThingAvgNegBean thingAvgNegBean) {
+	public RESTRecommendingComponent(ThingRecommendationBean thingRecommendationBean, ThingTagRecommendationBean thingTagRecommendationBean, ThingAvgNegBean thingAvgNegBean) {
 		this.thingRecommendationBean = thingRecommendationBean;
+		this.thingTagRecommendationBean = thingTagRecommendationBean;
 		this.thingAvgNegBean = thingAvgNegBean;
 	}
 
@@ -60,6 +63,11 @@ public class RESTRecommendingComponent extends RouteBuilder {
 				.to("direct:thing_recommend");
 
 		rest("{{rest.recommending.path}}") // set the path
+				.get("{{rest.recommending.recommendtag}}/{tag}") //
+				.produces(MediaType.APPLICATION_JSON) // set the producing type
+				.to("direct:thing_recommendtag");
+
+		rest("{{rest.recommending.path}}") // set the path
 				.get("{{rest.recommending.thingavgneg}}/{thingid}") //
 				.produces(MediaType.APPLICATION_JSON) // set the producing type
 				.to("direct:thingavgneg");
@@ -67,6 +75,11 @@ public class RESTRecommendingComponent extends RouteBuilder {
 		from("direct:thing_recommend") //
 				.log(LoggingLevel.DEBUG, "Received REST request: thing recommendation") // log
 				.bean(thingRecommendationBean) //
+				.end();
+
+		from("direct:thing_recommendtag") //
+				.log(LoggingLevel.DEBUG, "Received REST request: thing recommendation") // log
+				.bean(thingTagRecommendationBean) //
 				.end();
 
 		from("direct:thingavgneg") //

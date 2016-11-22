@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ac.at.tuwien.mt.servicehandler.beans.ms.DataContractMonitoringBean;
+import ac.at.tuwien.mt.servicehandler.beans.ms.DataContractMonitoringUpdateBean;
 import ac.at.tuwien.mt.servicehandler.beans.ms.MSMonitoringBalanceBean;
 import ac.at.tuwien.mt.servicehandler.beans.ms.ThingMonitoringQoDBean;
 import ac.at.tuwien.mt.servicehandler.beans.ms.ThingMonitoringQoSBean;
@@ -33,14 +34,17 @@ public class RESTMonitoringComponent extends RouteBuilder {
 	private ThingMonitoringQoDBean tMonitoringQoDBean;
 	private ThingMonitoringQoSBean tMonitoringQoSBean;
 	private DataContractMonitoringBean dcMonitoringBean;
+	private DataContractMonitoringUpdateBean dcMonitoringUpdateBean;
 
 	@Autowired
-	public RESTMonitoringComponent(MSMonitoringBalanceBean msBalanceMonitoringBean, ThingMonitoringQoDBean tMonitoringQoDBean, ThingMonitoringQoSBean tMonitoringQoSBean,
-			DataContractMonitoringBean dcMonitoringBean) {
+	public RESTMonitoringComponent(MSMonitoringBalanceBean msBalanceMonitoringBean,
+			ThingMonitoringQoDBean tMonitoringQoDBean, ThingMonitoringQoSBean tMonitoringQoSBean,
+			DataContractMonitoringBean dcMonitoringBean, DataContractMonitoringUpdateBean dcMonitoringUpdateBean) {
 		this.msBalanceMonitoringBean = msBalanceMonitoringBean;
 		this.tMonitoringQoDBean = tMonitoringQoDBean;
 		this.tMonitoringQoSBean = tMonitoringQoSBean;
 		this.dcMonitoringBean = dcMonitoringBean;
+		this.dcMonitoringUpdateBean = dcMonitoringUpdateBean;
 	}
 
 	@Override
@@ -66,6 +70,16 @@ public class RESTMonitoringComponent extends RouteBuilder {
 				.get("{{rest.microservice.monitoring}}/{{rest.microservice.monitoring.dc}}/{contractid}") //
 				.produces(MediaType.APPLICATION_JSON) // set the producing type
 				.to("direct:rest_microservice_monitoring_dc_cid");
+
+		rest("{{rest.microservice.path}}") // set the path
+				.post("{{rest.microservice.monitoring}}/{{rest.microservice.monitoring.dc}}") //
+				.produces(MediaType.APPLICATION_JSON) // set the producing type
+				.to("direct:rest_microservice_monitoring_dc_cid_post");
+
+		from("direct:rest_microservice_monitoring_dc_cid_post") // from rest
+				.log(LoggingLevel.DEBUG, "Received datacontract microservice request") // log
+				.bean(dcMonitoringUpdateBean) //
+				.end();
 
 		from("direct:rest_microservice_monitoring_dc_cid") // from rest
 				.log(LoggingLevel.DEBUG, "Received datacontract microservice request") // log

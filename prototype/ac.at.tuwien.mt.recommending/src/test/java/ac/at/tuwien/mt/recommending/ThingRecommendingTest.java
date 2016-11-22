@@ -123,6 +123,22 @@ public class ThingRecommendingTest extends DAOTest {
 	}
 
 	@Test
+	public void recommendViaRESTTest4() {
+		// insert some test data
+		Thing thing = SampleData.getSampleThing();
+		thingDAO.insert(thing);
+
+		// try to access via REST
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target(HTTP_SERVER).path("rest/recommending/recommendtag/#test2");
+		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+
+		// check the status and the response
+		int status = response.getStatus();
+		Assert.assertEquals(200, status);
+	}
+
+	@Test
 	public void recommendViaRESTTest1() {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(HTTP_SERVER).path("rest/recommending/recommend/someuserid");

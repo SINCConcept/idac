@@ -16,63 +16,18 @@
 			</Policies>
 		</RollingFile>
 		
-		<RollingFile name="LogfileComputation"
-			fileName="logs/ac.at.tuwien.mt.monitoring.computation.log4j2.log"
-			filePattern="logs/$${date:yyyy-MM}/app-%d{yyyy-MM-dd-HH}-%i.log.gz">
-			<PatternLayout>
-				<Pattern>%m%n</Pattern>
-			</PatternLayout>
-			<Policies>
-				<TimeBasedTriggeringPolicy />
-				<SizeBasedTriggeringPolicy size="250 MB" />
-			</Policies>
-		</RollingFile>
-		
-		<RollingFile name="lf"
-			fileName="logs/log_t1.log4j2.log"
-			filePattern="logs/$${date:yyyy-MM}/app-%d{yyyy-MM-dd-HH}-%i.log.gz">
-			<PatternLayout>
-				<Pattern>%m%n</Pattern>
-			</PatternLayout>
-			<Policies>
-				<TimeBasedTriggeringPolicy />
-				<SizeBasedTriggeringPolicy size="250 MB" />
-			</Policies>
-		</RollingFile>
-		
-		<RollingFile name="lf2"
-			fileName="logs/log_t2.log4j2.log"
-			filePattern="logs/$${date:yyyy-MM}/app-%d{yyyy-MM-dd-HH}-%i.log.gz">
-			<PatternLayout>
-				<Pattern>%m%n</Pattern>
-			</PatternLayout>
-			<Policies>
-				<TimeBasedTriggeringPolicy />
-				<SizeBasedTriggeringPolicy size="250 MB" />
-			</Policies>
-		</RollingFile>
-		
 		<Async name="Async">
 			<AppenderRef ref="Logfile" />
 		</Async>
+		
 	</Appenders>
+	
 	<Loggers>
+	
 		<Root level="INFO">
 			<AppenderRef ref="Async" />
 			<AppenderRef ref="Console" />
 		</Root>
 		
-	    <Logger name="ac.at.tuwien.mt.monitoring.internal.ThingSimulator3" level="info" additivity="false">
-	      <AppenderRef ref="LogfileComputation"/>
-	    </Logger>
-	    
-	    <Logger name="ac.at.tuwien.mt.monitoring.thread.AuxLoggerClass" level="info" additivity="false">
-	      <AppenderRef ref="lf"/>
-	    </Logger>
-	    
-	    <Logger name="ac.at.tuwien.mt.monitoring.thread.AuxLoggerClass2" level="info" additivity="false">
-	      <AppenderRef ref="lf2"/>
-	    </Logger>
-	    
 	</Loggers>
 </Configuration>

@@ -40,6 +40,21 @@ public interface RecommendingDAO {
 	public Thing recommend(String userId);
 
 	/**
+	 * Recommends a Thing based on a specific tag. <br/>
+	 * <br/>
+	 * The recommendation is computed as follows:<br/>
+	 * <ul>
+	 * <li>In case there are no ratings at all: random items are proposed.</li>
+	 * <li>In case there are ratings for things: the highest computed rating is
+	 * proposed.</li>
+	 * </ul>
+	 * 
+	 * @param tag
+	 * @return Thing
+	 */
+	public Thing recommendForTag(String tag);
+
+	/**
 	 * A map with the euclidean distance to the neighbors, with which the user
 	 * has the most common rated items.
 	 * 
@@ -95,10 +110,28 @@ public interface RecommendingDAO {
 	public Thing getTopRatedThing(String userId);
 
 	/**
+	 * Returns the top rated item based on the specified tag.
+	 * 
+	 * @param tag
+	 * @return Thing
+	 */
+	public Thing getTopRatedThingForTag(String tag);
+
+	/**
 	 * Returns a random item. If no items can be found, NULL is returned. The
 	 * owner of the random thing is not allowed to have the provided userId.
 	 * 
+	 * @param userId
+	 * @return Thing
 	 */
 	public Thing getRandomThing(String userId);
+
+	/**
+	 * Returns a random item based on a tag.
+	 * 
+	 * @param tag
+	 * @return Thing
+	 */
+	public Thing getRandomThingForTag(String tag);
 
 }
