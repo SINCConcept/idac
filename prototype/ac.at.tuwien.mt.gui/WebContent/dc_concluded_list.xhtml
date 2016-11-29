@@ -18,10 +18,10 @@
 						
 					<p:dataTable var="contract" value="#{concluded_dc_list.list}">
 						<p:column headerText="Contract ID">
-							<h:outputText value="#{contract.contractId}" />
+							<h:outputText value="#{contract.dataContractMetaInfo.contractId}" />
 						</p:column>
 						<p:column headerText="Closing Date">
-							<h:outputText value="#{contract.creationDate}" >
+							<h:outputText value="#{contract.dataContractMetaInfo.creationDate}" >
 								<f:convertDateTime pattern="dd.MM.yyyy HH:mm" timeZone="Europe/Berlin"/>
 							</h:outputText>
 						</p:column>
@@ -38,11 +38,11 @@
 								<f:setPropertyActionListener target="#{cdc.dataContract}" value="#{contract}" />
 								<h:outputText value="Rate" style="margin-left: 1em; margin-right: 1em;"/>
 							</p:commandLink>
-							<p:commandLink immediate="true" action="#{monitor_concluded_dc.monitor}" rendered="#{!contract.monitoring}">
+							<p:commandLink immediate="true" action="#{monitor_concluded_dc.monitor}" rendered="#{contract.monitoring == false and contract.dataContractMetaInfo.active==true}">
 								<f:setPropertyActionListener target="#{monitor_concluded_dc.dataContract}" value="#{contract}" />
 								<h:outputText value="Start Monitoring" style="margin-left: 1em; margin-right: 1em;"/>
 							</p:commandLink>
-							<p:commandLink immediate="true" action="#{monitor_concluded_dc.monitor}" rendered="#{contract.monitoring}">
+							<p:commandLink immediate="true" action="#{monitor_concluded_dc.monitor}" rendered="#{contract.monitoring == true and contract.dataContractMetaInfo.active==true}">
 								<f:setPropertyActionListener target="#{monitor_concluded_dc.dataContract}" value="#{contract}" />
 								<h:outputText value="Stop Monitoring" style="margin-left: 1em; margin-right: 1em;"/>
 							</p:commandLink>

@@ -10,17 +10,21 @@
  */
 package ac.at.tuwien.mt.model.datacontract;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.bson.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * @author Florin Bogdan Balint
  *
  */
-public class DataContractMetaInfo {
+@SuppressWarnings("serial")
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class DataContractMetaInfo implements Serializable {
 
 	private String contractId;
 	private Date creationDate;

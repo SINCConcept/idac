@@ -19,18 +19,18 @@
 						
 					<p:dataTable var="contract" value="#{open_dc_list.list}">
 						<p:column headerText="Date">
-							<h:outputText value="#{contract.creationDate}" >
+							<h:outputText value="#{contract.dataContractMetaInfo.creationDate}" >
 								<f:convertDateTime pattern="dd.MM.yyyy HH:mm" timeZone="Europe/Berlin"/>
 							</h:outputText>
 						</p:column>
 						<p:column headerText="Status">
-							<h:panelGroup rendered="#{contract.party1Id eq ucb.person.personId}">
-								<h:outputText style="color: red;" value="Awaiting answer" rendered="#{contract.party1Accepted and !contract.party2Accepted}"/>
-								<h:outputText style="color: #22ff00;" value="Offer received" rendered="#{!contract.party1Accepted and contract.party2Accepted}"/>
+							<h:panelGroup rendered="#{contract.dataContractMetaInfo.party1Id eq ucb.person.personId}">
+								<h:outputText style="color: red;" value="Awaiting answer" rendered="#{contract.dataContractMetaInfo.party1Accepted and !contract.dataContractMetaInfo.party2Accepted}"/>
+								<h:outputText style="color: #22ff00;" value="Offer received" rendered="#{!contract.dataContractMetaInfo.party1Accepted and contract.dataContractMetaInfo.party2Accepted}"/>
 							</h:panelGroup>
-							<h:panelGroup rendered="#{contract.party2Id eq ucb.person.personId}">
-								<h:outputText style="color: red;" value="Awaiting answer" rendered="#{contract.party2Accepted and !contract.party1Accepted}"/>
-								<h:outputText style="color: #22ff00;" value="Offer received" rendered="#{!contract.party2Accepted and contract.party1Accepted}"/>
+							<h:panelGroup rendered="#{contract.dataContractMetaInfo.party2Id eq ucb.person.personId}">
+								<h:outputText style="color: red;" value="Awaiting answer" rendered="#{contract.dataContractMetaInfo.party2Accepted and !contract.dataContractMetaInfo.party1Accepted}"/>
+								<h:outputText style="color: #22ff00;" value="Offer received" rendered="#{!contract.dataContractMetaInfo.party2Accepted and contract.dataContractMetaInfo.party1Accepted}"/>
 							</h:panelGroup>
 						</p:column>
 						<p:column headerText="View Offer">
