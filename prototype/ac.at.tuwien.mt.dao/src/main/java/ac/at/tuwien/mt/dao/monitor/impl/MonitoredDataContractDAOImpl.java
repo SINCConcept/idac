@@ -98,7 +98,8 @@ public class MonitoredDataContractDAOImpl implements ac.at.tuwien.mt.dao.monitor
 	 */
 	@Override
 	public void insert(MonitoredDataContract monitoredDataContract) {
-		LOGGER.debug("Inserting the MonitoredDataContract for the contractId: " + monitoredDataContract.getContractId());
+		LOGGER.debug(
+				"Inserting the MonitoredDataContract for the contractId: " + monitoredDataContract.getContractId());
 		monitoredDataContract.setRevision(1);
 		MongoCollection<Document> collection = mongoClient.getDatabase(database).getCollection(collectionName);
 		collection.insertOne(monitoredDataContract.getDocument());
@@ -112,7 +113,8 @@ public class MonitoredDataContractDAOImpl implements ac.at.tuwien.mt.dao.monitor
 	 * mt.model.thing.monitor.MonitoredDataContract)
 	 */
 	@Override
-	public MonitoredDataContract update(MonitoredDataContract monitoredDataContract) throws ResourceOutOfDateException, InvalidObjectException {
+	public MonitoredDataContract update(MonitoredDataContract monitoredDataContract)
+			throws ResourceOutOfDateException, InvalidObjectException {
 		if (monitoredDataContract.getContractId() == null) {
 			throw new InvalidObjectException("Invalid JSON data!");
 		}

@@ -27,7 +27,10 @@ public final class MonitoringProcessingHelper {
 	}
 
 	public static MonitoredQoD computeNewValues(MonitoredQoD foundEntry, MonitoredQoD newEntry) {
+		// first increase the number of samples
 		long totalNrOfSamples = foundEntry.getTotalNrOfSamples();
+		foundEntry.setTotalNrOfSamples(totalNrOfSamples + 1);
+
 		// compute the age only if it can be computed
 		double age = newEntry.getAverageAge();
 		if (age > 0) {
@@ -66,10 +69,10 @@ public final class MonitoringProcessingHelper {
 		if (currency > 0) {
 			double foundAvgCurrency = foundEntry.getAverageCurrency();
 			long foundAvgCurrencySamples = foundEntry.getAgeSamples();
-			double newCurrencyAge = (foundAvgCurrencySamples * foundAvgCurrency + currency) / (foundAvgCurrencySamples + 1);
+			double newCurrencyAge = (foundAvgCurrencySamples * foundAvgCurrency + currency)
+					/ (foundAvgCurrencySamples + 1);
 			foundEntry.setAverageCurrency(newCurrencyAge);
 		}
-		foundEntry.setTotalNrOfSamples(totalNrOfSamples + 1);
 		return foundEntry;
 	}
 
@@ -81,10 +84,12 @@ public final class MonitoringProcessingHelper {
 
 		long timeDiffInMs = currentMessageReceival.getTime() - firstMessageReceival.getTime();
 		long expectedNrOfSamples = (long) (timeDiffInMs / expectedFrequency.longValue());
+		expectedNrOfSamples++;
 		foundEntry.setExpectedNrOfSamples(expectedNrOfSamples);
 
 		long totalNrOfSamples = foundEntry.getTotalNrOfSamples();
-		foundEntry.setTotalNrOfSamples(totalNrOfSamples + 1);
+		totalNrOfSamples++;
+		foundEntry.setTotalNrOfSamples(totalNrOfSamples);
 
 		double availability = (double) ((double) totalNrOfSamples / (double) expectedNrOfSamples * 100);
 		// this is a fail-safe, in case more messages than necessary get

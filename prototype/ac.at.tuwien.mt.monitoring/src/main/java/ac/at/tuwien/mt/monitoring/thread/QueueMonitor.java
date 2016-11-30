@@ -73,7 +73,7 @@ public class QueueMonitor implements Runnable, ExceptionListener {
 		Session session = null;
 		try {
 			// Create a ConnectionFactory
-			String brokerURL = queueInfo[0];
+			String brokerURL = "tcp://91.250.115.96:61616";
 			if (StringUtils.isBlank(brokerURL)) {
 				return;
 			}
