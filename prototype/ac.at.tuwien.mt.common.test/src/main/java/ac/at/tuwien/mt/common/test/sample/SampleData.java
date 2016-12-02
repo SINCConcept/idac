@@ -105,18 +105,18 @@ public final class SampleData {
 	}
 
 	public static Thing getSampleThing() {
-		Thing device1 = new Thing();
-		device1.setResourceId("resource123");
-		device1.setOwnerId("owner123");
-		device1.setDataSample("{'temp','21°C'}");
-		device1.setThingId(DefaultIDGenerator.generateID());
+		Thing thing = new Thing();
+		thing.setResourceId("resource123");
+		thing.setOwnerId("owner123");
+		thing.setDataSample("{'temp','21°C'}");
+		thing.setThingId(DefaultIDGenerator.generateID());
 
 		DataRights dataRights = new DataRights();
 		dataRights.setCollection(true);
 		dataRights.setCommercialUsage(true);
 		dataRights.setDerivation(true);
 		dataRights.setReproduction(true);
-		device1.setDataRights(dataRights);
+		thing.setDataRights(dataRights);
 
 		QoD qod = new QoD();
 		qod.setAccuracy(new Double(0.9));
@@ -124,22 +124,22 @@ public final class SampleData {
 		qod.setConsistency(new Double(0.9));
 		qod.setCurrency(new Double(0.9));
 		qod.setTimeliness(new Double(0.9));
-		device1.setQod(qod);
+		thing.setQod(qod);
 
 		PricingModel pricingModel = new PricingModel();
 		pricingModel.setCurrency(Currency.EUR);
 		pricingModel.setPrice(new Double(0.01));
 		pricingModel.setNumberOfTransactions(1);
 		pricingModel.setTransaction(true);
-		device1.setPricingModel(pricingModel);
+		thing.setPricingModel(pricingModel);
 
 		Rating r1 = new Rating("user123", 5);
 		Rating r2 = new Rating("user124", 5);
 
-		device1.getRatings().add(r1);
-		device1.getRatings().add(r2);
+		thing.getRatings().add(r1);
+		thing.getRatings().add(r2);
 
-		return device1;
+		return thing;
 	}
 
 }

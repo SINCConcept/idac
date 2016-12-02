@@ -40,8 +40,8 @@ public class RESTRegistrationComponent extends RouteBuilder {
 		LOGGER.info("Configuring REST component...");
 
 		// define the jetty component
-		rest("{{rest.recommending.path}}") // set the path
-				.get("{{rest.recommending.register}}") // set the individual
+		rest("") // set the path
+				.get("register") // set the individual
 				.produces(MediaType.APPLICATION_JSON) // set the producing type
 				.to("direct:rest_recommending_register");
 

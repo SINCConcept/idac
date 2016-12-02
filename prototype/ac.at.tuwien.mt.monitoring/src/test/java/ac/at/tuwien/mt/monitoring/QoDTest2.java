@@ -89,10 +89,9 @@ public class QoDTest2 {
 
 	@AfterClass
 	public static void afterClass() {
-		// mongoClient.getDatabase(DB_NAME).getCollection(MT_THING).drop();
-		// mongoClient.getDatabase(DB_NAME).getCollection(MT_DATACONTRACT).drop();
-		// mongoClient.getDatabase(DB_NAME).getCollection(MT_DATACONTRACT_MONITOR).drop();
-
+		mongoClient.getDatabase(DB_NAME).getCollection(MT_THING).drop();
+		mongoClient.getDatabase(DB_NAME).getCollection(MT_DATACONTRACT).drop();
+		mongoClient.getDatabase(DB_NAME).getCollection(MT_DATACONTRACT_MONITOR).drop();
 		mongoClient.close();
 	}
 

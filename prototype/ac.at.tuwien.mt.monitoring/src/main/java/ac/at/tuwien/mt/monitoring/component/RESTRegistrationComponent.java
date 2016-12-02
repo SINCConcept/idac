@@ -46,8 +46,8 @@ public class RESTRegistrationComponent extends RouteBuilder {
 		queueInfo.setBrokerURL(brokerURL);
 
 		// define the jetty component
-		rest("{{rest.monitoring.path}}") // set the path
-				.get("{{rest.monitoring.register}}") // set the individual
+		rest("") // set the path
+				.get("register") // set the individual
 				.produces(MediaType.APPLICATION_JSON) // set the producing type
 				.to("direct:rest_monitoring_register");
 

@@ -39,8 +39,8 @@ public class RESTRegistrationComponent extends RouteBuilder {
 	public void configure() throws Exception {
 		LOGGER.info("Starting Jetty server...");
 
-		rest("{{rest.datacontract.path}}") // set the path
-				.get("{{rest.datacontract.register}}") // set the individual
+		rest("") // set the path
+				.get("register") // set the individual
 				.produces(MediaType.APPLICATION_JSON) // set the producing type
 				.to("direct:register");
 

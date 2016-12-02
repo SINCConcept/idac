@@ -34,9 +34,12 @@ public class ThingRecommendingTest extends DAOTest {
 
 	private static final Logger LOGGER = LogManager.getLogger(ThingRecommendingTest.class);
 
-	private static final String THING_COLLECTION = MongoDBPropertiesProvider.getString(MongoDBProperty.MONGO_DB_COLLECTION_THING);
-	private static final String DC_COLLECTION = MongoDBPropertiesProvider.getString(MongoDBProperty.MONGO_DB_COLLECTION_DATACONTRACT);
-	private static final String DC_TRAIL_COLLECTION = MongoDBPropertiesProvider.getString(MongoDBProperty.MONGO_DB_COLLECTION_DATACONTRACT_TRAIL);
+	private static final String THING_COLLECTION = MongoDBPropertiesProvider
+			.getString(MongoDBProperty.MONGO_DB_COLLECTION_THING);
+	private static final String DC_COLLECTION = MongoDBPropertiesProvider
+			.getString(MongoDBProperty.MONGO_DB_COLLECTION_DATACONTRACT);
+	private static final String DC_TRAIL_COLLECTION = MongoDBPropertiesProvider
+			.getString(MongoDBProperty.MONGO_DB_COLLECTION_DATACONTRACT_TRAIL);
 
 	private static BasicCamelStarter camelStarter = new BasicCamelStarter();
 	private static final String HTTP_SERVER = "http://localhost:12790";
@@ -126,6 +129,7 @@ public class ThingRecommendingTest extends DAOTest {
 	public void recommendViaRESTTest4() {
 		// insert some test data
 		Thing thing = SampleData.getSampleThing();
+		thing.getTags().add("#test2");
 		thingDAO.insert(thing);
 
 		// try to access via REST
