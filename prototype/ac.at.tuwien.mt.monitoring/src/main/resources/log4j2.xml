@@ -24,7 +24,7 @@
 	
 	<Loggers>
 	
-		<Root level="INFO">
+		<Root level="info">
 			<AppenderRef ref="Async" />
 			<AppenderRef ref="Console" />
 		</Root>

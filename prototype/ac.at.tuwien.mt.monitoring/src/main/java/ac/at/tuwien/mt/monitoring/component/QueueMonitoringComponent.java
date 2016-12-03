@@ -75,14 +75,14 @@ public class QueueMonitoringComponent {
 		this.mongoClient = mongoClient;
 	}
 
-	@Scheduled(cron = "*/60 * * * * ?")
+	@Scheduled(fixedRate = 60000)
 	public void garbageCollect() {
 		System.gc();
 	}
 
-	@Scheduled(cron = "*/60 * * * * ?")
+	@Scheduled(fixedRate = 60000)
 	public void initInternalCachingMaps() {
-		LOGGER.debug("Setting up");
+		LOGGER.debug("Setting up internal map.");
 		List<QueueInfo> queueInfos = QueueMonitoringManager.getInstance().getQueueInfos();
 		synchronized (queueInfos) {
 			synchronized (qm) {
@@ -103,9 +103,9 @@ public class QueueMonitoringComponent {
 							found = true;
 						}
 					}
-					Map<Thing, List<DataContract>> tcmap = new HashMap<>();
-					tcmap.put(thing, foundDataContracts);
 					if (!found) {
+						Map<Thing, List<DataContract>> tcmap = new HashMap<>();
+						tcmap.put(thing, foundDataContracts);
 						qm.put(keyToCompare, tcmap);
 					} else {
 						qm.get(keyToCompare).put(thing, foundDataContracts);
@@ -113,9 +113,10 @@ public class QueueMonitoringComponent {
 				}
 			}
 		}
+		LOGGER.debug("Internal map set up.");
 	}
 
-	@Scheduled(cron = "*/10 * * * * ?")
+	@Scheduled(fixedRate = 10000)
 	public void readQueues() {
 		LOGGER.debug("Reading queues: ");
 		if (qm.isEmpty()) {
@@ -123,7 +124,7 @@ public class QueueMonitoringComponent {
 		}
 
 		synchronized (qm) {
-			LOGGER.debug(qm.size());
+			LOGGER.info(qm.size());
 			for (Entry<String, Map<Thing, List<DataContract>>> entry : qm.entrySet()) {
 				Map<Thing, List<DataContract>> value = entry.getValue();
 				for (Entry<Thing, List<DataContract>> entry2 : value.entrySet()) {
