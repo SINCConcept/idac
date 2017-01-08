@@ -1,3 +1,4 @@
 theme: jekyll-theme-cayman
 title: IDAC
 description: An extensible IoT contract-aware Framework
+show_downloads: true
