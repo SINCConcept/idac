@@ -2,3 +2,4 @@ theme: jekyll-theme-cayman
 title: IDAC
 description: An Extensible Data Contract-aware IoT Framework
 show_downloads: true
+author: Florin Balint and Hong-Linh Truong
