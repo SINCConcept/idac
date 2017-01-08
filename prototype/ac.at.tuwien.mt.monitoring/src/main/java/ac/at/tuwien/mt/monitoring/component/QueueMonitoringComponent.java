@@ -76,11 +76,6 @@ public class QueueMonitoringComponent {
 	}
 
 	@Scheduled(fixedRate = 60000)
-	public void garbageCollect() {
-		System.gc();
-	}
-
-	@Scheduled(fixedRate = 60000)
 	public void initInternalCachingMaps() {
 		LOGGER.debug("Setting up internal map.");
 		List<QueueInfo> queueInfos = QueueMonitoringManager.getInstance().getQueueInfos();
