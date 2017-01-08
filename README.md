@@ -1,4 +1,6 @@
 # idac
-Extensible Contract-aware IoT Dataspace Framework
+An Extensible Data Contract-aware IoT Dataspace Framework
 
-Copyright 2016, TU Wien
+Authors: Florin Balint and Hong-Linh Truong
+
+Copyright 2016-2017, TU Wien
